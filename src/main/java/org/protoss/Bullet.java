@@ -2,6 +2,7 @@ package org.protoss;
 
 import lombok.Data;
 import org.protoss.constant.Dir;
+import org.protoss.constant.Group;
 
 import java.awt.*;
 
@@ -16,6 +17,7 @@ public class Bullet {
     private Dir dir;
     private TankFrame tankFrame;
     private Tank tank;
+    private Group group;
     private boolean living = true;
 
     public Bullet() {
@@ -27,6 +29,7 @@ public class Bullet {
         this.dir = dir;
         this.tank = tank;
         this.tankFrame = tank.getTankFrame();
+        this.group = tank.getGroup();
     }
 
     public void paint(Graphics g) {
@@ -76,6 +79,9 @@ public class Bullet {
     }
 
     public void collideWidth(Tank tank) {
+        if (group == tank.getGroup()) {
+            return;
+        }
         Rectangle bulletRect = new Rectangle(x, y, WIDTH, HEIGHT);
         Rectangle tankRect = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
         //相交

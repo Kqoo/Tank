@@ -2,6 +2,7 @@ package org.protoss;
 
 import lombok.Data;
 import org.protoss.constant.Dir;
+import org.protoss.constant.Group;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,23 +20,19 @@ public class Tank {
     private boolean moving = false;
     private boolean living = true;
     private TankFrame tankFrame;
+    private Group group = Group.enemy;
+
     private List<Bullet> bullets = new ArrayList<>();
 
     public Tank() {
     }
 
-    public Tank(int x, int y, Dir dir, TankFrame tankFrame) {
+    public Tank(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tankFrame = tankFrame;
-    }
-
-    public Tank(int x, int y, Dir dir, int speed) {
-        this.x = x;
-        this.y = y;
-        this.dir = dir;
-        this.speed = speed;
+        this.group = group;
     }
 
 
@@ -85,6 +82,9 @@ public class Tank {
                     x += speed;
                     break;
             }
+        }
+        if (group == Group.enemy && Math.random() > 0.88) {
+            fire();
         }
     }
 

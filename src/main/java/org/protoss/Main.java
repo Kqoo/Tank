@@ -1,6 +1,7 @@
 package org.protoss;
 
 import org.protoss.constant.Dir;
+import org.protoss.constant.Group;
 
 import javax.net.ssl.SSLEngineResult;
 import javax.swing.*;
@@ -15,7 +16,9 @@ public class Main {
         TankFrame tankFrame = new TankFrame();
         //敌方坦克
         for (int i = 0; i < 5; i++) {
-            tankFrame.getEnemies().add(new Tank(100 * (i + 1), 200, Dir.DOWN, tankFrame));
+            Tank tank = new Tank(100 * (i + 1), 200, Dir.DOWN, Group.enemy, tankFrame);
+            tank.setMoving(true);
+            tankFrame.getEnemies().add(tank);
         }
 
 

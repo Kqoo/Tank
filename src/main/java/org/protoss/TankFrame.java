@@ -2,11 +2,13 @@ package org.protoss;
 
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Dir;
+import org.protoss.constant.Group;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class TankFrame extends Frame {
@@ -15,7 +17,7 @@ public class TankFrame extends Frame {
     public static final int GAME_HEIGHT = 800;
 
     private Image offScreenImage;//双缓冲使用的缓冲图片
-    private final Tank mainTank = new Tank(200, 600, Dir.UP, this);
+    private final Tank mainTank = new Tank(200, 600, Dir.UP, Group.we, this);
     private List<Tank> enemies = new ArrayList<>();
 
     public TankFrame() {
@@ -59,6 +61,12 @@ public class TankFrame extends Frame {
         g.drawString("敌人数量:" + enemies.size(), 10, 90);
         g.setColor(color);
         List<Bullet> bullets = mainTank.getBullets();
+        List<Bullet> enemyBullets = enemies.stream()
+                                           .flatMap(e -> e.getBullets().stream())
+                                           .collect(Collectors.toList());
+        for (int i = 0; i < enemyBullets.size(); i++) {
+            enemyBullets.get(i).paint(g);
+        }
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
