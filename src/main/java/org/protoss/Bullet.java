@@ -16,6 +16,7 @@ public class Bullet {
     private Dir dir;
     private TankFrame tankFrame;
     private Tank tank;
+    private Image bulletImg;
     private boolean live = true;
 
     public Bullet() {
@@ -35,7 +36,21 @@ public class Bullet {
         }
         Color color = g.getColor();
         g.setColor(Color.RED);
-        g.fillOval(x, y, WIDTH, HEIGHT);
+        switch (dir) {
+            case UP:
+              bulletImg = ResourceManager.bulletU;
+                break;
+            case DOWN:
+                bulletImg = ResourceManager.bulletD;
+                break;
+            case LEFT:
+                bulletImg = ResourceManager.bulletL;
+                break;
+            case RIGHT:
+                bulletImg = ResourceManager.bulletR;
+                break;
+        }
+        g.drawImage(bulletImg, x, y, null);
         g.setColor(color);
         move();
     }
