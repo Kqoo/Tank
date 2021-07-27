@@ -3,18 +3,22 @@ package org.protoss;
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Dir;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 @Slf4j
-public class TankFrame extends JFrame {
+public class TankFrame extends Frame {
 
+    private static final int GAME_WIDTH = 800;
+    private static final int GAME_HEIGHT = 800;
+
+    private Image offScreenImage;//双缓冲使用的缓冲图片
     private Tank mainTank;
     private Bullet bullet;
 
+
     public TankFrame() {
-        setSize(800, 600);
+        setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setTitle("坦克大战");
         setVisible(true);
@@ -35,10 +39,23 @@ public class TankFrame extends JFrame {
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
         mainTank.paint(g);
         bullet.paint(g);
 
+    }
+
+    @Override
+    public void update(Graphics g) {
+        if (offScreenImage == null) {
+            offScreenImage = createImage(GAME_WIDTH, GAME_HEIGHT);
+        }
+        Graphics offScreenG = offScreenImage.getGraphics();
+        Color color = offScreenG.getColor();//保存颜色
+        offScreenG.setColor(Color.BLACK);
+        offScreenG.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        offScreenG.setColor(color);
+        paint(offScreenG);//在内存中画，画完在将整张图片画到屏幕上
+        g.drawImage(offScreenImage, 0, 0, null);
     }
 
     private class KeyListener extends KeyAdapter {
