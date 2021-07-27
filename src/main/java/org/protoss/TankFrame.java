@@ -5,6 +5,7 @@ import org.protoss.constant.Dir;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -14,8 +15,8 @@ public class TankFrame extends Frame {
     public static final int GAME_HEIGHT = 800;
 
     private Image offScreenImage;//双缓冲使用的缓冲图片
-    private final Tank mainTank = new Tank(200, 200, Dir.DOWN, this);
-
+    private final Tank mainTank = new Tank(200, 600, Dir.UP, this);
+    private List<Tank> enemies = new ArrayList<>();
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -56,6 +57,10 @@ public class TankFrame extends Frame {
         List<Bullet> bullets = mainTank.getBullets();
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
+        }
+        //敌方坦克
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).paint(g);
         }
     }
 
@@ -118,5 +123,13 @@ public class TankFrame extends Frame {
                 mainTank.setMoving(false);
             }
         }
+    }
+
+    public void setEnemies(List<Tank> enemies) {
+        this.enemies = enemies;
+    }
+
+    public List<Tank> getEnemies() {
+        return enemies;
     }
 }

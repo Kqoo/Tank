@@ -12,7 +12,7 @@ public class Bullet {
 
     private int x;
     private int y;
-    private int speed = 10;
+    private int speed = 30;
     private Dir dir;
     private TankFrame tankFrame;
     private Tank tank;
