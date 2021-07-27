@@ -10,13 +10,17 @@ import java.awt.event.*;
 @Slf4j
 public class TankFrame extends JFrame {
 
-    private Tank mainTank = new Tank(200, 200, Dir.DOWN);
+    private Tank mainTank;
+    private Bullet bullet;
 
     public TankFrame() {
         setSize(800, 600);
         setResizable(false);
         setTitle("坦克大战");
         setVisible(true);
+        mainTank = new Tank(200, 200, Dir.DOWN);
+        //todo
+        bullet = new Bullet(mainTank.getX(), mainTank.getY(), mainTank.getDir());
 
         //按键监听
         addKeyListener(new KeyListener());
@@ -33,6 +37,7 @@ public class TankFrame extends JFrame {
     public void paint(Graphics g) {
         super.paint(g);
         mainTank.paint(g);
+        bullet.paint(g);
 
     }
 
@@ -45,7 +50,6 @@ public class TankFrame extends JFrame {
         @Override
         public void keyPressed(KeyEvent e) {
             super.keyPressed(e);
-            log.info("pressed:{}", e.getKeyCode());
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
                     bu = true;
@@ -58,6 +62,9 @@ public class TankFrame extends JFrame {
                     break;
                 case KeyEvent.VK_RIGHT:
                     br = true;
+                    break;
+                case KeyEvent.VK_SPACE:
+                    mainTank.fire();
                     break;
             }
             setMainTankDir();
@@ -84,10 +91,14 @@ public class TankFrame extends JFrame {
         }
 
         private void setMainTankDir() {
+            mainTank.setMoving(true);
             if (bu) mainTank.setDir(Dir.UP);
             if (bd) mainTank.setDir(Dir.DOWN);
             if (bl) mainTank.setDir(Dir.LEFT);
             if (br) mainTank.setDir(Dir.RIGHT);
+            if (!bu && !bd && !bl && !br) {
+                mainTank.setMoving(false);
+            }
         }
     }
 }
