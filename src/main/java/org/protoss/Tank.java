@@ -15,6 +15,7 @@ public class Tank {
     private int speed = 10;
     private boolean moving = false;
     private TankFrame tankFrame;
+    private Image tankImg = null;
     private List<Bullet> bullets = new ArrayList<>();
 
     public Tank() {
@@ -39,7 +40,21 @@ public class Tank {
         move();
         Color color = g.getColor();
         g.setColor(Color.WHITE);
-        g.fillRect(x, y, 50, 50);
+        switch (dir) {
+            case UP:
+                tankImg = ResourceManager.tankU;
+                break;
+            case DOWN:
+                tankImg = ResourceManager.tankD;
+                break;
+            case LEFT:
+                tankImg = ResourceManager.tankL;
+                break;
+            case RIGHT:
+                tankImg = ResourceManager.tankR;
+                break;
+        }
+        g.drawImage(tankImg, x, y, null);
         g.setColor(color);
     }
 
