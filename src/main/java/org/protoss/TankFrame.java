@@ -5,16 +5,16 @@ import org.protoss.constant.Dir;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 @Slf4j
 public class TankFrame extends Frame {
 
-    private static final int GAME_WIDTH = 800;
-    private static final int GAME_HEIGHT = 800;
+   public static final int GAME_WIDTH = 800;
+   public static final int GAME_HEIGHT = 800;
 
     private Image offScreenImage;//双缓冲使用的缓冲图片
-    private Tank mainTank;
-    private Bullet bullet;
+    private final Tank mainTank;
 
 
     public TankFrame() {
@@ -22,9 +22,7 @@ public class TankFrame extends Frame {
         setResizable(false);
         setTitle("坦克大战");
         setVisible(true);
-        mainTank = new Tank(200, 200, Dir.DOWN);
-        //todo
-        bullet = new Bullet(mainTank.getX(), mainTank.getY(), mainTank.getDir());
+        mainTank = new Tank(200, 200, Dir.DOWN, this);
 
         //按键监听
         addKeyListener(new KeyListener());
@@ -37,13 +35,7 @@ public class TankFrame extends Frame {
         });
     }
 
-    @Override
-    public void paint(Graphics g) {
-        mainTank.paint(g);
-        bullet.paint(g);
-
-    }
-
+    //update在paint之前调用
     @Override
     public void update(Graphics g) {
         if (offScreenImage == null) {
@@ -56,6 +48,16 @@ public class TankFrame extends Frame {
         offScreenG.setColor(color);
         paint(offScreenG);//在内存中画，画完在将整张图片画到屏幕上
         g.drawImage(offScreenImage, 0, 0, null);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        mainTank.paint(g);
+        log.debug("子弹数量:{}", mainTank.getBullets().size());
+        List<Bullet> bullets = mainTank.getBullets();
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).paint(g);
+        }
     }
 
     private class KeyListener extends KeyAdapter {
@@ -80,9 +82,6 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_RIGHT:
                     br = true;
                     break;
-                case KeyEvent.VK_SPACE:
-                    mainTank.fire();
-                    break;
             }
             setMainTankDir();
         }
@@ -102,6 +101,9 @@ public class TankFrame extends Frame {
                     break;
                 case KeyEvent.VK_RIGHT:
                     br = false;
+                    break;
+                case KeyEvent.VK_SPACE:
+                    mainTank.fire();
                     break;
             }
             setMainTankDir();

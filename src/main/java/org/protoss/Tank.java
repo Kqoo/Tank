@@ -14,15 +14,17 @@ public class Tank {
     private Dir dir;
     private int speed = 10;
     private boolean moving = false;
+    private TankFrame tankFrame;
     private List<Bullet> bullets = new ArrayList<>();
 
     public Tank() {
     }
 
-    public Tank(int x, int y, Dir dir) {
+    public Tank(int x, int y, Dir dir, TankFrame tankFrame) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tankFrame = tankFrame;
     }
 
     public Tank(int x, int y, Dir dir, int speed) {
@@ -61,6 +63,6 @@ public class Tank {
     }
 
     public void fire() {
-
+        bullets.add(new Bullet(x, y, dir, this));
     }
 }
