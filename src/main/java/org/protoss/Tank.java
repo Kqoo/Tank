@@ -9,13 +9,15 @@ import java.util.List;
 
 @Data
 public class Tank {
+    public static final int WIDTH = ResourceManager.tankD.getWidth();
+    public static final int HEIGHT = ResourceManager.tankD.getHeight();
+
     private int x;
     private int y;
     private Dir dir;
     private int speed = 10;
     private boolean moving = false;
     private TankFrame tankFrame;
-    private Image tankImg = null;
     private List<Bullet> bullets = new ArrayList<>();
 
     public Tank() {
@@ -40,6 +42,7 @@ public class Tank {
         move();
         Color color = g.getColor();
         g.setColor(Color.WHITE);
+        Image tankImg = null;
         switch (dir) {
             case UP:
                 tankImg = ResourceManager.tankU;
@@ -78,6 +81,9 @@ public class Tank {
     }
 
     public void fire() {
-        bullets.add(new Bullet(x, y, dir, this));
+        int bx = x + WIDTH / 2 - Bullet.WIDTH / 2;
+        int by = y + HEIGHT / 2 - Bullet.HEIGHT / 2;
+
+        bullets.add(new Bullet(bx, by, dir, this));
     }
 }

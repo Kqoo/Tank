@@ -7,8 +7,8 @@ import java.awt.*;
 
 @Data
 public class Bullet {
-    private static final int WIDTH = 10;
-    private static final int HEIGHT = 10;
+    public static final int WIDTH = ResourceManager.bulletD.getWidth();
+    public static final int HEIGHT = ResourceManager.bulletD.getHeight();
 
     private int x;
     private int y;
@@ -16,7 +16,6 @@ public class Bullet {
     private Dir dir;
     private TankFrame tankFrame;
     private Tank tank;
-    private Image bulletImg;
     private boolean live = true;
 
     public Bullet() {
@@ -36,9 +35,10 @@ public class Bullet {
         }
         Color color = g.getColor();
         g.setColor(Color.RED);
+        Image bulletImg = null;
         switch (dir) {
             case UP:
-              bulletImg = ResourceManager.bulletU;
+                bulletImg = ResourceManager.bulletU;
                 break;
             case DOWN:
                 bulletImg = ResourceManager.bulletD;

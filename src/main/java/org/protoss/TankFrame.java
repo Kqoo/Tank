@@ -10,11 +10,11 @@ import java.util.List;
 @Slf4j
 public class TankFrame extends Frame {
 
-   public static final int GAME_WIDTH = 800;
-   public static final int GAME_HEIGHT = 800;
+    public static final int GAME_WIDTH = 800;
+    public static final int GAME_HEIGHT = 800;
 
     private Image offScreenImage;//双缓冲使用的缓冲图片
-    private final Tank mainTank;
+    private final Tank mainTank = new Tank(200, 200, Dir.DOWN, this);
 
 
     public TankFrame() {
@@ -22,7 +22,6 @@ public class TankFrame extends Frame {
         setResizable(false);
         setTitle("坦克大战");
         setVisible(true);
-        mainTank = new Tank(200, 200, Dir.DOWN, this);
 
         //按键监听
         addKeyListener(new KeyListener());
@@ -53,7 +52,7 @@ public class TankFrame extends Frame {
     @Override
     public void paint(Graphics g) {
         mainTank.paint(g);
-        log.debug("子弹数量:{}", mainTank.getBullets().size());
+//        log.debug("子弹数量:{}", mainTank.getBullets().size());
         List<Bullet> bullets = mainTank.getBullets();
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
