@@ -17,6 +17,7 @@ public class Tank {
     private Dir dir;
     private int speed = 10;
     private boolean moving = false;
+    private boolean living = true;
     private TankFrame tankFrame;
     private List<Bullet> bullets = new ArrayList<>();
 
@@ -39,6 +40,10 @@ public class Tank {
 
 
     public void paint(Graphics g) {
+        if (!living) {
+            tankFrame.getEnemies().remove(this);
+            return;
+        }
         move();
         Color color = g.getColor();
         g.setColor(Color.WHITE);
@@ -62,6 +67,9 @@ public class Tank {
     }
 
     private void move() {
+        if (!living) {
+            return;
+        }
         if (moving) {
             switch (dir) {
                 case UP:
@@ -85,5 +93,9 @@ public class Tank {
         int by = y + HEIGHT / 2 - Bullet.HEIGHT / 2;
 
         bullets.add(new Bullet(bx, by, dir, this));
+    }
+
+    public void die() {
+        living = false;
     }
 }

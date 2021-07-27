@@ -12,11 +12,11 @@ public class Bullet {
 
     private int x;
     private int y;
-    private int speed = 30;
+    private int speed = 20;
     private Dir dir;
     private TankFrame tankFrame;
     private Tank tank;
-    private boolean live = true;
+    private boolean living = true;
 
     public Bullet() {
     }
@@ -30,7 +30,7 @@ public class Bullet {
     }
 
     public void paint(Graphics g) {
-        if (!live) {
+        if (!living) {
             tank.getBullets().remove(this);
         }
         Color color = g.getColor();
@@ -71,7 +71,22 @@ public class Bullet {
                 break;
         }
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
-            live = false;
+            living = false;
         }
+    }
+
+    public void collideWidth(Tank tank) {
+        Rectangle bulletRect = new Rectangle(x, y, WIDTH, HEIGHT);
+        Rectangle tankRect = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
+        //相交
+        if (bulletRect.intersects(tankRect)) {
+            tank.die();
+            this.die();
+        }
+
+    }
+
+    private void die() {
+        living = false;
     }
 }

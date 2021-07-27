@@ -53,7 +53,11 @@ public class TankFrame extends Frame {
     @Override
     public void paint(Graphics g) {
         mainTank.paint(g);
-//        log.debug("子弹数量:{}", mainTank.getBullets().size());
+        Color color = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("子弹数量:" + mainTank.getBullets().size(), 10, 60);
+        g.drawString("敌人数量:" + enemies.size(), 10, 90);
+        g.setColor(color);
         List<Bullet> bullets = mainTank.getBullets();
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
@@ -61,6 +65,12 @@ public class TankFrame extends Frame {
         //敌方坦克
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).paint(g);
+        }
+        //碰撞检测
+        for (int i = 0; i < bullets.size(); i++) {
+            for (int j = 0; j < enemies.size(); j++) {
+                bullets.get(i).collideWidth(enemies.get(j));
+            }
         }
     }
 
