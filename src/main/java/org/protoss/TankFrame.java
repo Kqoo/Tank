@@ -1,22 +1,16 @@
 package org.protoss;
 
+import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Dir;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+@Slf4j
 public class TankFrame extends JFrame {
 
-    private int x;
-    private int y;
-    private int xSpeed = 10;
-    private int ySpeed = 10;
-    private boolean bu;
-    private boolean bd;
-    private boolean bl;
-    private boolean br;
-    private Dir dir = null;
+    private Tank mainTank = new Tank(200, 200, Dir.DOWN);
 
     public TankFrame() {
         setSize(800, 600);
@@ -38,29 +32,20 @@ public class TankFrame extends JFrame {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if (dir != null) {
-            switch (dir) {
-                case UP:
-                    y -= ySpeed;
-                    break;
-                case DOWN:
-                    y += ySpeed;
-                    break;
-                case LEFT:
-                    x -= xSpeed;
-                    break;
-                case RIGHT:
-                    x += xSpeed;
-                    break;
-            }
-        }
-        g.fillRect(x, y, 50, 50);
+        mainTank.paint(g);
+
     }
 
     private class KeyListener extends KeyAdapter {
+        private boolean bu;
+        private boolean bd;
+        private boolean bl;
+        private boolean br;
+
         @Override
         public void keyPressed(KeyEvent e) {
             super.keyPressed(e);
+            log.info("pressed:{}", e.getKeyCode());
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
                     bu = true;
@@ -99,10 +84,10 @@ public class TankFrame extends JFrame {
         }
 
         private void setMainTankDir() {
-            if (bu) dir = Dir.UP;
-            if (bd) dir = Dir.DOWN;
-            if (bl) dir = Dir.LEFT;
-            if (br) dir = Dir.RIGHT;
+            if (bu) mainTank.setDir(Dir.UP);
+            if (bd) mainTank.setDir(Dir.DOWN);
+            if (bl) mainTank.setDir(Dir.LEFT);
+            if (br) mainTank.setDir(Dir.RIGHT);
         }
     }
 }
