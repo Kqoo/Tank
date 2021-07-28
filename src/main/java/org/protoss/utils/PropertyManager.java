@@ -1,24 +1,31 @@
 package org.protoss.utils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyManager {
-    static Properties properties = new Properties();
+
+    private static Properties INSTANCE = new Properties();
+
+    private PropertyManager() {
+    }
 
     static {
         try {
-            properties.load(PropertyManager.class.getClassLoader().getResourceAsStream("config"));
+            INSTANCE.load(PropertyManager.class.getClassLoader().getResourceAsStream("config"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Object get(String key) {
-        if (properties == null) {
+    public static Properties getInstance(){
+        return INSTANCE;
+    }
+
+    public static String get(String key) {
+        if (INSTANCE == null) {
             return null;
         }
-        return properties.get(key);
+        return (String) INSTANCE.get(key);
     }
 }
