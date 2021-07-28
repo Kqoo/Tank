@@ -108,6 +108,23 @@ public class Tank {
         if (group == Group.enemy && Math.random() > 0.88) {
             randomDir();
         }
+        boundCheck();
+    }
+
+    /**
+     * 边界检测
+     */
+    private void boundCheck() {
+        if (x < 0) {
+            x = 0;
+        } else if (x > TankFrame.GAME_WIDTH - WIDTH) {
+            x = TankFrame.GAME_WIDTH -WIDTH;
+        }
+        if (y < 30) {
+            y = 30;
+        } else if (y > TankFrame.GAME_HEIGHT -HEIGHT) {
+            y = TankFrame.GAME_HEIGHT -HEIGHT;
+        }
     }
 
     private void randomDir() {
