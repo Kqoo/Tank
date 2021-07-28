@@ -2,6 +2,7 @@ package org.protoss;
 
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
+import org.protoss.utils.PropertyManager;
 
 import javax.net.ssl.SSLEngineResult;
 import javax.swing.*;
@@ -13,6 +14,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+        System.out.println(PropertyManager.get("initEnemyCount"));
+
         TankFrame tankFrame = new TankFrame();
         //敌方坦克
         for (int i = 0; i < 5; i++) {
