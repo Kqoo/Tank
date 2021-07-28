@@ -19,6 +19,7 @@ public class TankFrame extends Frame {
     private Image offScreenImage;//双缓冲使用的缓冲图片
     private final Tank mainTank = new Tank(200, 600, Dir.UP, Group.we, this);
     private List<Tank> enemies = new ArrayList<>();
+    private List<Explode> explodes = new ArrayList<>();
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -64,9 +65,15 @@ public class TankFrame extends Frame {
         List<Bullet> enemyBullets = enemies.stream()
                                            .flatMap(e -> e.getBullets().stream())
                                            .collect(Collectors.toList());
+        //敌方坦克
         for (int i = 0; i < enemyBullets.size(); i++) {
             enemyBullets.get(i).paint(g);
         }
+        //爆炸
+        for (int i = 0; i < explodes.size(); i++) {
+            explodes.get(i).paint(g);
+        }
+        //子弹
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
@@ -80,6 +87,7 @@ public class TankFrame extends Frame {
                 bullets.get(i).collideWidth(enemies.get(j));
             }
         }
+
     }
 
     private class KeyListener extends KeyAdapter {
@@ -150,4 +158,9 @@ public class TankFrame extends Frame {
     public List<Tank> getEnemies() {
         return enemies;
     }
+
+    public List<Explode> getExplodes() {
+        return explodes;
+    }
+
 }

@@ -23,6 +23,7 @@ public class Explode {
         if (step >= ResourceManager.explodes.length) {
             step = 0;
             living = false;
+            tankFrame.getExplodes().remove(this);
         }
     }
 }

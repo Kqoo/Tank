@@ -97,5 +97,7 @@ public class Tank {
 
     public void die() {
         living = false;
+        //爆炸
+        tankFrame.getExplodes().add(new Explode(x, y, tankFrame));
     }
 }
