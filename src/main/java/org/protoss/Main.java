@@ -10,15 +10,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println(PropertyManager.get("initEnemyCount"));
+        int initEnemyCount = Integer.parseInt(Objects.requireNonNull(PropertyManager.get("initEnemyCount")));
 
         TankFrame tankFrame = new TankFrame();
         //敌方坦克
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < initEnemyCount; i++) {
             Tank tank = new Tank(100 * (i + 1), 200, Dir.DOWN, Group.enemy, tankFrame);
             tank.setMoving(true);
             tankFrame.getEnemies().add(tank);
