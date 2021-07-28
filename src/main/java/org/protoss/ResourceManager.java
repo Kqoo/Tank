@@ -1,5 +1,7 @@
 package org.protoss;
 
+import org.protoss.utils.ImageUtil;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -14,15 +16,15 @@ public class ResourceManager {
 
     static {
         try {
-            tankU = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/tankU.gif"));
-            tankD = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/tankD.gif"));
-            tankL = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/tankL.gif"));
-            tankR = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/tankR.gif"));
+            tankU = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/BadTank1.png"));
+            tankD = ImageUtil.rotate(tankU, 180);
+            tankL = ImageUtil.rotate(tankU, -90);
+            tankR = ImageUtil.rotate(tankU, 90);
 
             bulletU = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/bulletU.gif"));
-            bulletD = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/bulletD.gif"));
-            bulletL = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/bulletL.gif"));
-            bulletR = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/bulletR.gif"));
+            bulletD = ImageUtil.rotate(bulletU, 180);
+            bulletL = ImageUtil.rotate(bulletU, -90);
+            bulletR = ImageUtil.rotate(bulletU, 90);
 
             for (int i = 0; i < explodes.length; i++) {
                 explodes[i] = ImageIO.read(ResourceManager.class.getResourceAsStream("../../images/e" + (i + 1) + ".gif"));

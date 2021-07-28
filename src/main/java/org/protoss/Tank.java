@@ -10,8 +10,8 @@ import java.util.List;
 
 @Data
 public class Tank {
-    public static final int WIDTH = ResourceManager.tankD.getWidth();
-    public static final int HEIGHT = ResourceManager.tankD.getHeight();
+    public static final int WIDTH = ResourceManager.tankU.getWidth();
+    public static final int HEIGHT = ResourceManager.tankU.getHeight();
 
     private int x;
     private int y;
