@@ -7,11 +7,12 @@ import org.protoss.constant.Group;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Data
 public class Tank {
-    public static final int WIDTH = ResourceManager.tankU.getWidth();
-    public static final int HEIGHT = ResourceManager.tankU.getHeight();
+    public static final int WIDTH = ResourceManager.myTankD.getWidth();
+    public static final int HEIGHT = ResourceManager.myTankD.getHeight();
 
     private int x;
     private int y;
@@ -21,6 +22,7 @@ public class Tank {
     private boolean living = true;
     private TankFrame tankFrame;
     private Group group = Group.enemy;
+    private static Random random = new Random();
 
     private List<Bullet> bullets = new ArrayList<>();
 
@@ -45,19 +47,36 @@ public class Tank {
         Color color = g.getColor();
         g.setColor(Color.WHITE);
         Image tankImg = null;
-        switch (dir) {
-            case UP:
-                tankImg = ResourceManager.tankU;
-                break;
-            case DOWN:
-                tankImg = ResourceManager.tankD;
-                break;
-            case LEFT:
-                tankImg = ResourceManager.tankL;
-                break;
-            case RIGHT:
-                tankImg = ResourceManager.tankR;
-                break;
+        if (group == Group.we) {
+            switch (dir) {
+                case UP:
+                    tankImg = ResourceManager.myTankU;
+                    break;
+                case DOWN:
+                    tankImg = ResourceManager.myTankD;
+                    break;
+                case LEFT:
+                    tankImg = ResourceManager.myTankL;
+                    break;
+                case RIGHT:
+                    tankImg = ResourceManager.myTankR;
+                    break;
+            }
+        } else {
+            switch (dir) {
+                case UP:
+                    tankImg = ResourceManager.enemyTankU;
+                    break;
+                case DOWN:
+                    tankImg = ResourceManager.enemyTankD;
+                    break;
+                case LEFT:
+                    tankImg = ResourceManager.enemyTankL;
+                    break;
+                case RIGHT:
+                    tankImg = ResourceManager.enemyTankR;
+                    break;
+            }
         }
         g.drawImage(tankImg, x, y, null);
         g.setColor(color);
@@ -86,6 +105,13 @@ public class Tank {
         if (group == Group.enemy && Math.random() > 0.88) {
             fire();
         }
+        if (group == Group.enemy && Math.random() > 0.88) {
+            randomDir();
+        }
+    }
+
+    private void randomDir() {
+        dir = Dir.values()[random.nextInt(4)];
     }
 
     public void fire() {
@@ -96,8 +122,10 @@ public class Tank {
     }
 
     public void die() {
+        int ex = x + WIDTH / 2 - Explode.WIDTH / 2;
+        int ey = y + HEIGHT / 2 - Explode.HEIGHT / 2;
         living = false;
         //爆炸
-        tankFrame.getExplodes().add(new Explode(x, y, tankFrame));
+        tankFrame.getExplodes().add(new Explode(ex, ey, tankFrame));
     }
 }

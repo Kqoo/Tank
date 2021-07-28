@@ -59,7 +59,8 @@ public class TankFrame extends Frame {
         Color color = g.getColor();
         g.setColor(Color.WHITE);
         g.drawString("子弹数量:" + mainTank.getBullets().size(), 10, 60);
-        g.drawString("敌人数量:" + enemies.size(), 10, 90);
+        g.drawString("敌人数量:" + enemies.size(), 10, 80);
+        g.drawString("爆炸数量:" + explodes.size(), 10, 100);
         g.setColor(color);
         List<Bullet> bullets = mainTank.getBullets();
         List<Bullet> enemyBullets = enemies.stream()
