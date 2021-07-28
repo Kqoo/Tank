@@ -23,6 +23,7 @@ public class Tank {
     private TankFrame tankFrame;
     private Group group = Group.enemy;
     private static Random random = new Random();
+    private Rectangle rect;
 
     private List<Bullet> bullets = new ArrayList<>();
 
@@ -35,6 +36,7 @@ public class Tank {
         this.dir = dir;
         this.tankFrame = tankFrame;
         this.group = group;
+        rect = new Rectangle(x, y, Tank.WIDTH, Tank.HEIGHT);
     }
 
 
@@ -109,6 +111,9 @@ public class Tank {
             randomDir();
         }
         boundCheck();
+        //边侧检测后更新rect坐标
+        rect.x = x;
+        rect.y = y;
     }
 
     /**
@@ -118,12 +123,12 @@ public class Tank {
         if (x < 0) {
             x = 0;
         } else if (x > TankFrame.GAME_WIDTH - WIDTH) {
-            x = TankFrame.GAME_WIDTH -WIDTH;
+            x = TankFrame.GAME_WIDTH - WIDTH;
         }
         if (y < 30) {
             y = 30;
-        } else if (y > TankFrame.GAME_HEIGHT -HEIGHT) {
-            y = TankFrame.GAME_HEIGHT -HEIGHT;
+        } else if (y > TankFrame.GAME_HEIGHT - HEIGHT) {
+            y = TankFrame.GAME_HEIGHT - HEIGHT;
         }
     }
 

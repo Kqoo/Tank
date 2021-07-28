@@ -19,6 +19,7 @@ public class Bullet {
     private Tank tank;
     private Group group;
     private boolean living = true;
+    private Rectangle rect;
 
     public Bullet() {
     }
@@ -30,6 +31,7 @@ public class Bullet {
         this.tank = tank;
         this.tankFrame = tank.getTankFrame();
         this.group = tank.getGroup();
+        rect = new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
     public void paint(Graphics g) {
@@ -73,19 +75,22 @@ public class Bullet {
                 x += speed;
                 break;
         }
+
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
             living = false;
         }
+
+        rect.x = x;
+        rect.y = y;
     }
 
     public void collideWidth(Tank tank) {
         if (group == tank.getGroup()) {
             return;
         }
-        Rectangle bulletRect = new Rectangle(x, y, WIDTH, HEIGHT);
-        Rectangle tankRect = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
+
         //相交
-        if (bulletRect.intersects(tankRect)) {
+        if (rect.intersects(tank.getRect())) {
             tank.die();
             this.die();
         }
