@@ -29,7 +29,7 @@ public class Main {
         new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(10);
                     tankFrame.repaint();
                 } catch (InterruptedException e) {
                     e.printStackTrace();

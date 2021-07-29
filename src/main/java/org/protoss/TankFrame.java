@@ -3,6 +3,8 @@ package org.protoss;
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
+import org.protoss.strategy.DefaultFireStrategy;
+import org.protoss.strategy.TripleFireStrategy;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -136,7 +138,15 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_SPACE:
                     mainTank.fire();
                     break;
+                case KeyEvent.VK_F1:
+                    if (mainTank.getFireStrategy() instanceof DefaultFireStrategy) {
+                        mainTank.setFireStrategy(new TripleFireStrategy());
+                    } else {
+                        mainTank.setFireStrategy(new DefaultFireStrategy());
+                    }
+                    break;
             }
+
             setMainTankDir();
         }
 
@@ -150,6 +160,7 @@ public class TankFrame extends Frame {
                 mainTank.setMoving(false);
             }
         }
+
     }
 
     public void setEnemies(List<Tank> enemies) {

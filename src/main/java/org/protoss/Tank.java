@@ -1,8 +1,12 @@
 package org.protoss;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
+import org.protoss.strategy.DefaultFireStrategy;
+import org.protoss.strategy.FireStrategy;
+import org.protoss.utils.PropertyManager;
 import org.protoss.utils.ResourceManager;
 
 import java.awt.*;
@@ -11,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 @Data
+@Slf4j
 public class Tank {
     public static final int WIDTH = ResourceManager.myTankD.getWidth();
     public static final int HEIGHT = ResourceManager.myTankD.getHeight();
@@ -18,13 +23,14 @@ public class Tank {
     private int x;
     private int y;
     private Dir dir;
-    private int speed = 10;
+    private int speed = Integer.parseInt(PropertyManager.get("tankSpeed"));
     private boolean moving = false;
     private boolean living = true;
     private TankFrame tankFrame;
     private Group group = Group.enemy;
     private static Random random = new Random();
     private Rectangle rect;
+    private FireStrategy fireStrategy;
 
     private List<Bullet> bullets = new ArrayList<>();
 
@@ -38,6 +44,16 @@ public class Tank {
         this.tankFrame = tankFrame;
         this.group = group;
         rect = new Rectangle(x, y, Tank.WIDTH, Tank.HEIGHT);
+        try {
+            if (group == Group.we) {
+                fireStrategy = (FireStrategy) Class.forName(PropertyManager.get("weFireStrategy")).newInstance();
+            } else {
+                fireStrategy = (FireStrategy) Class.forName(PropertyManager.get("enemyFireStrategy")).newInstance();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("开火策略异常：", e);
+        }
     }
 
 
@@ -138,10 +154,12 @@ public class Tank {
     }
 
     public void fire() {
-        int bx = x + WIDTH / 2 - Bullet.WIDTH / 2;
-        int by = y + HEIGHT / 2 - Bullet.HEIGHT / 2;
+        fireStrategy.fire(this);
 
-        bullets.add(new Bullet(bx, by, dir, this));
+//        int bx = x + WIDTH / 2 - Bullet.WIDTH / 2;
+//        int by = y + HEIGHT / 2 - Bullet.HEIGHT / 2;
+//
+//        bullets.add(new Bullet(bx, by, dir, this));
     }
 
     public void die() {
@@ -151,4 +169,5 @@ public class Tank {
         //爆炸
         tankFrame.getExplodes().add(new Explode(ex, ey, tankFrame));
     }
+
 }

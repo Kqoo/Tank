@@ -1,2 +1,6 @@
 #初始敌方坦克数量
 initEnemyCount=10
+tankSpeed=4
+bulletSpeed=4
+weFireStrategy=org.protoss.strategy.TripleFireStrategy
+enemyFireStrategy=org.protoss.strategy.DefaultFireStrategy

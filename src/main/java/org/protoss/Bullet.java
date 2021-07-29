@@ -3,6 +3,7 @@ package org.protoss;
 import lombok.Data;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
+import org.protoss.utils.PropertyManager;
 import org.protoss.utils.ResourceManager;
 
 import java.awt.*;
@@ -14,7 +15,7 @@ public class Bullet {
 
     private int x;
     private int y;
-    private int speed = 20;
+    private int speed = Integer.parseInt(PropertyManager.get("bulletSpeed"));
     private Dir dir;
     private TankFrame tankFrame;
     private Tank tank;
@@ -44,15 +45,19 @@ public class Bullet {
         Image bulletImg = null;
         switch (dir) {
             case UP:
+                y -= 10;
                 bulletImg = ResourceManager.bulletU;
                 break;
             case DOWN:
+                y += 10;
                 bulletImg = ResourceManager.bulletD;
                 break;
             case LEFT:
+                x -= 10;
                 bulletImg = ResourceManager.bulletL;
                 break;
             case RIGHT:
+                x += 10;
                 bulletImg = ResourceManager.bulletR;
                 break;
         }
