@@ -72,8 +72,6 @@ public class Tank extends BaseTank {
             return;
         }
         move();
-        Color color = g.getColor();
-        g.setColor(Color.WHITE);
         Image tankImg = null;
         if (group == Group.we) {
             switch (dir) {
@@ -107,7 +105,6 @@ public class Tank extends BaseTank {
             }
         }
         g.drawImage(tankImg, x, y, null);
-        g.setColor(color);
     }
 
     private void move() {
