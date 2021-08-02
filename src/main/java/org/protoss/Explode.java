@@ -1,10 +1,11 @@
 package org.protoss;
 
+import org.protoss.factory.product.BaseExplode;
 import org.protoss.utils.ResourceManager;
 
 import java.awt.*;
 
-public class Explode {
+public class Explode extends BaseExplode {
     public static final int WIDTH = ResourceManager.explodes[0].getWidth();
     public static final int HEIGHT = ResourceManager.explodes[0].getHeight();
 
@@ -20,6 +21,7 @@ public class Explode {
         this.tankFrame = tankFrame;
     }
 
+    @Override
     public void paint(Graphics g) {
         g.drawImage(ResourceManager.explodes[step++], x, y, null);
         if (step >= ResourceManager.explodes.length) {
