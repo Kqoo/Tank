@@ -63,8 +63,6 @@ public class Tank {
             return;
         }
         move();
-        Color color = g.getColor();
-        g.setColor(Color.WHITE);
         Image tankImg = null;
         if (group == Group.we) {
             switch (dir) {
@@ -98,7 +96,6 @@ public class Tank {
             }
         }
         g.drawImage(tankImg, x, y, null);
-        g.setColor(color);
     }
 
     private void move() {
