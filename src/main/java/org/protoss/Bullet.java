@@ -9,12 +9,10 @@ import org.protoss.utils.ResourceManager;
 import java.awt.*;
 
 @Data
-public class Bullet {
+public class Bullet extends GameObject{
     public static final int WIDTH = ResourceManager.bulletD.getWidth();
     public static final int HEIGHT = ResourceManager.bulletD.getHeight();
 
-    private int x;
-    private int y;
     private int speed = Integer.parseInt(PropertyManager.get("bulletSpeed"));
     private Dir dir;
     private GameModel gameModel;
@@ -34,7 +32,7 @@ public class Bullet {
 
     public void paint(Graphics g) {
         if (!living) {
-           gameModel.getBullets().remove(this);
+           gameModel.remove(this);
         }
         Color color = g.getColor();
         g.setColor(Color.RED);
@@ -86,20 +84,7 @@ public class Bullet {
         rect.y = y;
     }
 
-    public void collideWidth(Tank tank) {
-        if (group == tank.getGroup()) {
-            return;
-        }
-
-        //相交
-        if (rect.intersects(tank.getRect())) {
-            tank.die();
-            this.die();
-        }
-
-    }
-
-    private void die() {
+    public void die() {
         living = false;
     }
 }

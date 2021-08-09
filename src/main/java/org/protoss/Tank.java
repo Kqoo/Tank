@@ -9,18 +9,16 @@ import org.protoss.utils.PropertyManager;
 import org.protoss.utils.ResourceManager;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 @Data
 @Slf4j
-public class Tank {
+public class Tank extends GameObject {
     public static final int WIDTH = ResourceManager.myTankD.getWidth();
     public static final int HEIGHT = ResourceManager.myTankD.getHeight();
 
-    private int x;
-    private int y;
+    private int prevX;
+    private int prevY;
     private Dir dir;
     private int speed = Integer.parseInt(PropertyManager.get("tankSpeed"));
     private boolean moving = false;
@@ -31,7 +29,8 @@ public class Tank {
     private FireStrategy fireStrategy;
 
     private GameModel gameModel;
-    public Tank(int x, int y, Dir dir, Group group,GameModel gameModel) {
+
+    public Tank(int x, int y, Dir dir, Group group, GameModel gameModel) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -53,7 +52,7 @@ public class Tank {
 
     public void paint(Graphics g) {
         if (!living) {
-            gameModel.getEnemies().remove(this);
+            gameModel.remove(this);
             return;
         }
         move();
@@ -96,6 +95,9 @@ public class Tank {
         if (!living) {
             return;
         }
+        //记录上一次位置
+        prevX = x;
+        prevY = y;
         if (moving) {
             switch (dir) {
                 case UP:
@@ -158,7 +160,7 @@ public class Tank {
         int ey = y + HEIGHT / 2 - Explode.HEIGHT / 2;
         living = false;
         //爆炸
-        gameModel.getExplodes().add(new Explode(ex, ey, gameModel));
+        gameModel.add(new Explode(ex, ey, gameModel));
     }
 
 }

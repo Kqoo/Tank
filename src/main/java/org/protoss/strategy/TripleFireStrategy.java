@@ -20,7 +20,7 @@ public class TripleFireStrategy implements FireStrategy {
                 int bx = tank.getX() + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
                 int by = tank.getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
                 Bullet bullet = new Bullet(bx, by, tank.getDir(), tank.getGroup(), tank.getGameModel());
-                tank.getGameModel().getBullets().add(bullet);
+                tank.getGameModel().add(bullet);
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
