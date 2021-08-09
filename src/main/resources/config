@@ -1,6 +1,8 @@
 #初始敌方坦克数量
-initEnemyCount=10
+initEnemyCount=5
 tankSpeed=4
 bulletSpeed=4
 weFireStrategy=org.protoss.strategy.TripleFireStrategy
 enemyFireStrategy=org.protoss.strategy.DefaultFireStrategy
+#碰撞责任链
+colliders=org.protoss.cor.BulletTankCollider,org.protoss.cor.TankTankCollider
