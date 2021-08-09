@@ -1,15 +1,9 @@
 package org.protoss;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
-import org.protoss.factory.DefaultFactory;
-import org.protoss.factory.GameFactory;
-import org.protoss.factory.product.BaseBullet;
-import org.protoss.factory.product.BaseExplode;
-import org.protoss.factory.product.BaseTank;
 import org.protoss.strategy.DefaultFireStrategy;
 import org.protoss.strategy.FireStrategy;
 import org.protoss.utils.PropertyManager;
@@ -20,27 +14,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
-public class Tank extends BaseTank {
+public class Tank {
     public static final int WIDTH = ResourceManager.myTankD.getWidth();
     public static final int HEIGHT = ResourceManager.myTankD.getHeight();
 
-//    private int x;
-//    private int y;
-//    private Dir dir;
-//    private int speed = Integer.parseInt(PropertyManager.get("tankSpeed"));
-//    private boolean moving = false;
-//    private boolean living = true;
-//    private TankFrame tankFrame;
-//    private Group group = Group.enemy;
-//    private static Random random = new Random();
-//    private Rectangle rect;
-//    private FireStrategy fireStrategy;
-//    private GameFactory gameFactory;
-//
-//    private List<BaseBullet> bullets = new ArrayList<>();
+    private int x;
+    private int y;
+    private Dir dir;
+    private int speed = Integer.parseInt(PropertyManager.get("tankSpeed"));
+    private boolean moving = false;
+    private boolean living = true;
+    private TankFrame tankFrame;
+    private Group group = Group.enemy;
+    private static Random random = new Random();
+    private Rectangle rect;
+    private FireStrategy fireStrategy;
+
+    private List<Bullet> bullets = new ArrayList<>();
 
     public Tank() {
     }
@@ -52,7 +44,6 @@ public class Tank extends BaseTank {
         this.tankFrame = tankFrame;
         this.group = group;
         rect = new Rectangle(x, y, Tank.WIDTH, Tank.HEIGHT);
-        gameFactory = new DefaultFactory();
         try {
             if (group == Group.we) {
                 fireStrategy = (FireStrategy) Class.forName(PropertyManager.get("weFireStrategy")).newInstance();
@@ -65,7 +56,7 @@ public class Tank extends BaseTank {
         }
     }
 
-    @Override
+
     public void paint(Graphics g) {
         if (!living) {
             tankFrame.getEnemies().remove(this);
@@ -173,7 +164,7 @@ public class Tank extends BaseTank {
         int ey = y + HEIGHT / 2 - Explode.HEIGHT / 2;
         living = false;
         //爆炸
-        tankFrame.getExplodes().add(gameFactory.createExplode(ex, ey, tankFrame));
+        tankFrame.getExplodes().add(new Explode(ex, ey, tankFrame));
     }
 
 }

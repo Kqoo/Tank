@@ -3,15 +3,13 @@ package org.protoss;
 import lombok.Data;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
-import org.protoss.factory.product.BaseBullet;
-import org.protoss.factory.product.BaseTank;
 import org.protoss.utils.PropertyManager;
 import org.protoss.utils.ResourceManager;
 
 import java.awt.*;
 
 @Data
-public class Bullet extends BaseBullet {
+public class Bullet {
     public static final int WIDTH = ResourceManager.bulletD.getWidth();
     public static final int HEIGHT = ResourceManager.bulletD.getHeight();
 
@@ -20,16 +18,15 @@ public class Bullet extends BaseBullet {
     private int speed = Integer.parseInt(PropertyManager.get("bulletSpeed"));
     private Dir dir;
     private TankFrame tankFrame;
-    private BaseTank tank;
-
-//    private Group group;
-//    private boolean living = true;
-//    private Rectangle rect;
+    private Tank tank;
+    private Group group;
+    private boolean living = true;
+    private Rectangle rect;
 
     public Bullet() {
     }
 
-    public Bullet(int x, int y, Dir dir, BaseTank tank) {
+    public Bullet(int x, int y, Dir dir, Tank tank) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -39,7 +36,6 @@ public class Bullet extends BaseBullet {
         rect = new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
-    @Override
     public void paint(Graphics g) {
         if (!living) {
             tank.getBullets().remove(this);

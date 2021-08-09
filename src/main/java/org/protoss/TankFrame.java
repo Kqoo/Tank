@@ -3,11 +3,6 @@ package org.protoss;
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
-import org.protoss.factory.DefaultFactory;
-import org.protoss.factory.GameFactory;
-import org.protoss.factory.product.BaseBullet;
-import org.protoss.factory.product.BaseExplode;
-import org.protoss.factory.product.BaseTank;
 import org.protoss.strategy.DefaultFireStrategy;
 import org.protoss.strategy.TripleFireStrategy;
 
@@ -22,13 +17,11 @@ public class TankFrame extends Frame {
 
     public static final int GAME_WIDTH = 800;
     public static final int GAME_HEIGHT = 800;
-    public static GameFactory gameFactory = new DefaultFactory();
 
     private Image offScreenImage;//双缓冲使用的缓冲图片
-
-    private final BaseTank mainTank = gameFactory.createTank(200, 600, Dir.UP, Group.we, this);
-    private List<BaseTank> enemies = new ArrayList<>();
-    private List<BaseExplode> explodes = new ArrayList<>();
+    private final Tank mainTank = new Tank(200, 600, Dir.UP, Group.we, this);
+    private List<Tank> enemies = new ArrayList<>();
+    private List<Explode> explodes = new ArrayList<>();
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -71,10 +64,10 @@ public class TankFrame extends Frame {
         g.drawString("敌人数量:" + enemies.size(), 10, 80);
         g.drawString("爆炸数量:" + explodes.size(), 10, 100);
         g.setColor(color);
-        List<BaseBullet> bullets = mainTank.getBullets();
-        List<BaseBullet> enemyBullets = enemies.stream()
-                                               .flatMap(e -> e.getBullets().stream())
-                                               .collect(Collectors.toList());
+        List<Bullet> bullets = mainTank.getBullets();
+        List<Bullet> enemyBullets = enemies.stream()
+                                           .flatMap(e -> e.getBullets().stream())
+                                           .collect(Collectors.toList());
         //敌方坦克
         for (int i = 0; i < enemyBullets.size(); i++) {
             enemyBullets.get(i).paint(g);
@@ -170,15 +163,15 @@ public class TankFrame extends Frame {
 
     }
 
-    public void setEnemies(List<BaseTank> enemies) {
+    public void setEnemies(List<Tank> enemies) {
         this.enemies = enemies;
     }
 
-    public List<BaseTank> getEnemies() {
+    public List<Tank> getEnemies() {
         return enemies;
     }
 
-    public List<BaseExplode> getExplodes() {
+    public List<Explode> getExplodes() {
         return explodes;
     }
 

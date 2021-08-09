@@ -2,7 +2,6 @@ package org.protoss;
 
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
-import org.protoss.factory.product.BaseTank;
 import org.protoss.utils.PropertyManager;
 
 import javax.net.ssl.SSLEngineResult;
@@ -21,8 +20,7 @@ public class Main {
         TankFrame tankFrame = new TankFrame();
         //敌方坦克
         for (int i = 0; i < initEnemyCount; i++) {
-//            Tank tank = new Tank(100 * (i + 1), 200, Dir.DOWN, Group.enemy, tankFrame);
-            BaseTank tank = TankFrame.gameFactory.createTank(100 * (i + 1), 200, Dir.DOWN, Group.enemy, tankFrame);
+            Tank tank = new Tank(100 * (i + 1), 200, Dir.DOWN, Group.enemy, tankFrame);
             tank.setMoving(true);
             tankFrame.getEnemies().add(tank);
         }
