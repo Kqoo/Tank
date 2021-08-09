@@ -2,15 +2,14 @@ package org.protoss;
 
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Dir;
-import org.protoss.constant.Group;
 import org.protoss.strategy.DefaultFireStrategy;
 import org.protoss.strategy.TripleFireStrategy;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 @Slf4j
 public class TankFrame extends Frame {
@@ -19,16 +18,14 @@ public class TankFrame extends Frame {
     public static final int GAME_HEIGHT = 800;
 
     private Image offScreenImage;//双缓冲使用的缓冲图片
-    private final Tank mainTank = new Tank(200, 600, Dir.UP, Group.we, this);
-    private List<Tank> enemies = new ArrayList<>();
-    private List<Explode> explodes = new ArrayList<>();
-
+    private GameModel gameModel = new GameModel();
+    private Tank mainTank;
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setTitle("坦克大战");
         setVisible(true);
-
+        mainTank = gameModel.getMainTank();
         //按键监听
         addKeyListener(new KeyListener());
         //关闭监听
@@ -57,40 +54,7 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-        mainTank.paint(g);
-        Color color = g.getColor();
-        g.setColor(Color.WHITE);
-        g.drawString("子弹数量:" + mainTank.getBullets().size(), 10, 60);
-        g.drawString("敌人数量:" + enemies.size(), 10, 80);
-        g.drawString("爆炸数量:" + explodes.size(), 10, 100);
-        g.setColor(color);
-        List<Bullet> bullets = mainTank.getBullets();
-        List<Bullet> enemyBullets = enemies.stream()
-                                           .flatMap(e -> e.getBullets().stream())
-                                           .collect(Collectors.toList());
-        //敌方坦克
-        for (int i = 0; i < enemyBullets.size(); i++) {
-            enemyBullets.get(i).paint(g);
-        }
-        //爆炸
-        for (int i = 0; i < explodes.size(); i++) {
-            explodes.get(i).paint(g);
-        }
-        //子弹
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).paint(g);
-        }
-        //敌方坦克
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies.get(i).paint(g);
-        }
-        //碰撞检测
-        for (int i = 0; i < bullets.size(); i++) {
-            for (int j = 0; j < enemies.size(); j++) {
-                bullets.get(i).collideWidth(enemies.get(j));
-            }
-        }
-
+        gameModel.paint(g);
     }
 
     private class KeyListener extends KeyAdapter {
@@ -162,17 +126,4 @@ public class TankFrame extends Frame {
         }
 
     }
-
-    public void setEnemies(List<Tank> enemies) {
-        this.enemies = enemies;
-    }
-
-    public List<Tank> getEnemies() {
-        return enemies;
-    }
-
-    public List<Explode> getExplodes() {
-        return explodes;
-    }
-
 }

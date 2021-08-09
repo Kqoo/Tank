@@ -17,28 +17,24 @@ public class Bullet {
     private int y;
     private int speed = Integer.parseInt(PropertyManager.get("bulletSpeed"));
     private Dir dir;
-    private TankFrame tankFrame;
+    private GameModel gameModel;
     private Tank tank;
     private Group group;
     private boolean living = true;
     private Rectangle rect;
 
-    public Bullet() {
-    }
-
-    public Bullet(int x, int y, Dir dir, Tank tank) {
+    public Bullet(int x, int y, Dir dir, Group group, GameModel gameModel) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tank = tank;
-        this.tankFrame = tank.getTankFrame();
-        this.group = tank.getGroup();
+        this.gameModel = gameModel;
+        this.group = group;
         rect = new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
     public void paint(Graphics g) {
         if (!living) {
-            tank.getBullets().remove(this);
+           gameModel.getBullets().remove(this);
         }
         Color color = g.getColor();
         g.setColor(Color.RED);

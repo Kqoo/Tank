@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
-import org.protoss.strategy.DefaultFireStrategy;
 import org.protoss.strategy.FireStrategy;
 import org.protoss.utils.PropertyManager;
 import org.protoss.utils.ResourceManager;
@@ -26,23 +25,18 @@ public class Tank {
     private int speed = Integer.parseInt(PropertyManager.get("tankSpeed"));
     private boolean moving = false;
     private boolean living = true;
-    private TankFrame tankFrame;
-    private Group group = Group.enemy;
+    private Group group;
     private static Random random = new Random();
     private Rectangle rect;
     private FireStrategy fireStrategy;
 
-    private List<Bullet> bullets = new ArrayList<>();
-
-    public Tank() {
-    }
-
-    public Tank(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
+    private GameModel gameModel;
+    public Tank(int x, int y, Dir dir, Group group,GameModel gameModel) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tankFrame = tankFrame;
         this.group = group;
+        this.gameModel = gameModel;
         rect = new Rectangle(x, y, Tank.WIDTH, Tank.HEIGHT);
         try {
             if (group == Group.we) {
@@ -59,7 +53,7 @@ public class Tank {
 
     public void paint(Graphics g) {
         if (!living) {
-            tankFrame.getEnemies().remove(this);
+            gameModel.getEnemies().remove(this);
             return;
         }
         move();
@@ -164,7 +158,7 @@ public class Tank {
         int ey = y + HEIGHT / 2 - Explode.HEIGHT / 2;
         living = false;
         //爆炸
-        tankFrame.getExplodes().add(new Explode(ex, ey, tankFrame));
+        gameModel.getExplodes().add(new Explode(ex, ey, gameModel));
     }
 
 }

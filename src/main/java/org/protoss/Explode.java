@@ -10,14 +10,14 @@ public class Explode {
 
     private int x;
     private int y;
-    private TankFrame tankFrame;
+    private GameModel gameModel;
     private boolean living = true;
     private int step;//第几张图
 
-    public Explode(int x, int y, TankFrame tankFrame) {
+    public Explode(int x, int y, GameModel gameModel) {
         this.x = x;
         this.y = y;
-        this.tankFrame = tankFrame;
+        this.gameModel = gameModel;
     }
 
     public void paint(Graphics g) {
@@ -25,7 +25,7 @@ public class Explode {
         if (step >= ResourceManager.explodes.length) {
             step = 0;
             living = false;
-            tankFrame.getExplodes().remove(this);
+            gameModel.getExplodes().remove(this);
         }
     }
 }

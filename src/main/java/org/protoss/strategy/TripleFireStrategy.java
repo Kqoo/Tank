@@ -1,13 +1,12 @@
 package org.protoss.strategy;
 
-import ch.qos.logback.core.util.ExecutorServiceUtil;
-import jdk.nashorn.internal.ir.CallNode;
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.Bullet;
 import org.protoss.Tank;
 import org.protoss.utils.ThreadUtil;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 @Slf4j
 public class TripleFireStrategy implements FireStrategy {
@@ -20,8 +19,8 @@ public class TripleFireStrategy implements FireStrategy {
             for (int i = 0; i < 3; i++) {
                 int bx = tank.getX() + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
                 int by = tank.getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-                Bullet bullet = new Bullet(bx, by, tank.getDir(), tank);
-                tank.getBullets().add(bullet);
+                Bullet bullet = new Bullet(bx, by, tank.getDir(), tank.getGroup(), tank.getGameModel());
+                tank.getGameModel().getBullets().add(bullet);
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
