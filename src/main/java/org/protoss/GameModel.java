@@ -25,6 +25,10 @@ public class GameModel {
             tank.setMoving(true);
             add(tank);
         }
+        //墙
+        add(new Wall(200,150,50,100));
+        add(new Wall(550,150,50,100));
+        add(new Wall(200,400,400,100));
         colliderChain = new ColliderChain();
     }
 

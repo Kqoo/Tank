@@ -5,4 +5,4 @@ bulletSpeed=4
 weFireStrategy=org.protoss.strategy.TripleFireStrategy
 enemyFireStrategy=org.protoss.strategy.DefaultFireStrategy
 #Åö×²ÔðÈÎÁ´
-colliders=org.protoss.cor.BulletTankCollider,org.protoss.cor.TankTankCollider
+colliders=org.protoss.cor.BulletTankCollider,org.protoss.cor.TankTankCollider,org.protoss.cor.BulletWallCollider
