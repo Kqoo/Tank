@@ -18,14 +18,13 @@ public class TankFrame extends Frame {
     public static final int GAME_HEIGHT = 800;
 
     private Image offScreenImage;//双缓冲使用的缓冲图片
-    private GameModel gameModel = new GameModel();
     private Tank mainTank;
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setTitle("坦克大战");
         setVisible(true);
-        mainTank = gameModel.getMainTank();
+        mainTank = GameModel.getINSTANCE().getMainTank();
         //按键监听
         addKeyListener(new KeyListener());
         //关闭监听
@@ -54,7 +53,7 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-        gameModel.paint(g);
+        GameModel.getINSTANCE().paint(g);
     }
 
     private class KeyListener extends KeyAdapter {

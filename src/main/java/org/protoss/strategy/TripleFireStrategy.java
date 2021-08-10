@@ -2,6 +2,7 @@ package org.protoss.strategy;
 
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.Bullet;
+import org.protoss.GameModel;
 import org.protoss.Tank;
 import org.protoss.utils.ThreadUtil;
 
@@ -19,8 +20,8 @@ public class TripleFireStrategy implements FireStrategy {
             for (int i = 0; i < 3; i++) {
                 int bx = tank.getX() + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
                 int by = tank.getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-                Bullet bullet = new Bullet(bx, by, tank.getDir(), tank.getGroup(), tank.getGameModel());
-                tank.getGameModel().add(bullet);
+                Bullet bullet = new Bullet(bx, by, tank.getDir(), tank.getGroup());
+                GameModel.getINSTANCE().add(bullet);
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {

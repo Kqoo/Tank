@@ -15,24 +15,22 @@ public class Bullet extends GameObject{
 
     private int speed = Integer.parseInt(PropertyManager.get("bulletSpeed"));
     private Dir dir;
-    private GameModel gameModel;
     private Tank tank;
     private Group group;
     private boolean living = true;
     private Rectangle rect;
 
-    public Bullet(int x, int y, Dir dir, Group group, GameModel gameModel) {
+    public Bullet(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.gameModel = gameModel;
         this.group = group;
         rect = new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
     public void paint(Graphics g) {
         if (!living) {
-           gameModel.remove(this);
+           GameModel.getINSTANCE().remove(this);
         }
         Color color = g.getColor();
         g.setColor(Color.RED);

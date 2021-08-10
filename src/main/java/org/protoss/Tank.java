@@ -27,15 +27,12 @@ public class Tank extends GameObject {
     private static Random random = new Random();
     private Rectangle rect;
     private FireStrategy fireStrategy;
-
-    private GameModel gameModel;
-
-    public Tank(int x, int y, Dir dir, Group group, GameModel gameModel) {
+    
+    public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.gameModel = gameModel;
         rect = new Rectangle(x, y, Tank.WIDTH, Tank.HEIGHT);
         try {
             if (group == Group.we) {
@@ -52,7 +49,7 @@ public class Tank extends GameObject {
 
     public void paint(Graphics g) {
         if (!living) {
-            gameModel.remove(this);
+            GameModel.getINSTANCE().remove(this);
             return;
         }
         move();
@@ -160,7 +157,7 @@ public class Tank extends GameObject {
         int ey = y + HEIGHT / 2 - Explode.HEIGHT / 2;
         living = false;
         //爆炸
-        gameModel.add(new Explode(ex, ey, gameModel));
+        GameModel.getINSTANCE().add(new Explode(ex, ey));
     }
 
 }

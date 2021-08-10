@@ -1,6 +1,7 @@
 package org.protoss.strategy;
 
 import org.protoss.Bullet;
+import org.protoss.GameModel;
 import org.protoss.Tank;
 
 public class DefaultFireStrategy implements FireStrategy {
@@ -9,6 +10,6 @@ public class DefaultFireStrategy implements FireStrategy {
         int bx = tank.getX() + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int by = tank.getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
 
-        tank.getGameModel().add(new Bullet(bx, by, tank.getDir(), tank.getGroup(), tank.getGameModel()));
+        GameModel.getINSTANCE().add(new Bullet(bx, by, tank.getDir(), tank.getGroup()));
     }
 }
