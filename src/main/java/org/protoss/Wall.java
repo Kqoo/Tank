@@ -5,16 +5,13 @@ import java.awt.*;
 public class Wall extends GameObject {
 
     private Rectangle rect;
-    private int width;
-    private int height;
-
 
     public Wall(int x, int y, int w, int h) {
         this.x = x;
         this.y = y;
         width = w;
         height = h;
-        rect = new Rectangle(x, y, w, h);
+        rect = new Rectangle(x, y, w+20, h+20);
     }
 
     @Override

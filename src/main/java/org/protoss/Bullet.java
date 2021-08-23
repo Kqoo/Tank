@@ -10,8 +10,8 @@ import java.awt.*;
 
 @Data
 public class Bullet extends GameObject{
-    public static final int WIDTH = ResourceManager.bulletD.getWidth();
-    public static final int HEIGHT = ResourceManager.bulletD.getHeight();
+//    public static final int WIDTH = ResourceManager.bulletD.getWidth();
+//    public static final int HEIGHT = ResourceManager.bulletD.getHeight();
 
     private int speed = Integer.parseInt(PropertyManager.get("bulletSpeed"));
     private Dir dir;
@@ -23,9 +23,11 @@ public class Bullet extends GameObject{
     public Bullet(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
+        width = ResourceManager.bulletD.getWidth();
+        height = ResourceManager.bulletD.getHeight();
         this.dir = dir;
         this.group = group;
-        rect = new Rectangle(x, y, WIDTH, HEIGHT);
+        rect = new Rectangle(x, y, width, height);
     }
 
     public void paint(Graphics g) {

@@ -25,3 +25,12 @@
 hs_err_pid*
 
 /.idea/
+/src/test
+target/classes/META-INF/
+target/classes/audio/
+target/classes/config
+target/classes/images/
+target/classes/logback.xml
+target/generated-sources/
+target/generated-test-sources/
+target/test-classes/META-INF/

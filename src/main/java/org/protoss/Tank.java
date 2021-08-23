@@ -14,8 +14,8 @@ import java.util.Random;
 @Data
 @Slf4j
 public class Tank extends GameObject {
-    public static final int WIDTH = ResourceManager.myTankD.getWidth();
-    public static final int HEIGHT = ResourceManager.myTankD.getHeight();
+//    public static final int WIDTH = ResourceManager.myTankD.getWidth();
+//    public static final int HEIGHT = ResourceManager.myTankD.getHeight();
 
     private int prevX;
     private int prevY;
@@ -27,13 +27,15 @@ public class Tank extends GameObject {
     private static Random random = new Random();
     private Rectangle rect;
     private FireStrategy fireStrategy;
-    
+
     public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
+        width = ResourceManager.myTankD.getWidth();
+        height = ResourceManager.myTankD.getHeight();
         this.dir = dir;
         this.group = group;
-        rect = new Rectangle(x, y, Tank.WIDTH, Tank.HEIGHT);
+        rect = new Rectangle(x, y, width, height);
         try {
             if (group == Group.we) {
                 fireStrategy = (FireStrategy) Class.forName(PropertyManager.get("weFireStrategy")).newInstance();
@@ -129,13 +131,13 @@ public class Tank extends GameObject {
     private void boundCheck() {
         if (x < 0) {
             x = 0;
-        } else if (x > TankFrame.GAME_WIDTH - WIDTH) {
-            x = TankFrame.GAME_WIDTH - WIDTH;
+        } else if (x > TankFrame.GAME_WIDTH - width) {
+            x = TankFrame.GAME_WIDTH - width;
         }
         if (y < 30) {
             y = 30;
-        } else if (y > TankFrame.GAME_HEIGHT - HEIGHT) {
-            y = TankFrame.GAME_HEIGHT - HEIGHT;
+        } else if (y > TankFrame.GAME_HEIGHT - height) {
+            y = TankFrame.GAME_HEIGHT - height;
         }
     }
 
@@ -153,11 +155,15 @@ public class Tank extends GameObject {
     }
 
     public void die() {
-        int ex = x + WIDTH / 2 - Explode.WIDTH / 2;
-        int ey = y + HEIGHT / 2 - Explode.HEIGHT / 2;
+        Explode explode = new Explode();
+        int ex = x + width / 2 - explode.width / 2;
+        int ey = y + height / 2 - explode.height / 2;
+        explode.setX(ex);
+        explode.setY(ey);
+
         living = false;
         //爆炸
-        GameModel.getINSTANCE().add(new Explode(ex, ey));
+        GameModel.getINSTANCE().add(explode);
     }
 
 }

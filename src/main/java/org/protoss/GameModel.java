@@ -3,6 +3,7 @@ package org.protoss;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
 import org.protoss.cor.ColliderChain;
+import org.protoss.decorator.HPDecorator;
 import org.protoss.utils.PropertyManager;
 
 import java.awt.*;
@@ -25,7 +26,7 @@ public class GameModel {
         for (int i = 0; i < initEnemyCount; i++) {
             Tank tank = new Tank(100 * i, 200, Dir.DOWN, Group.enemy);
             tank.setMoving(true);
-            add(tank);
+            add(new HPDecorator(tank));
         }
         //墙
         add(new Wall(200, 150, 50, 100));
