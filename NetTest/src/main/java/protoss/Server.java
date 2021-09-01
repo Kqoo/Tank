@@ -16,8 +16,28 @@ public class Server {
         while (true) {
             Socket socket = server.accept();
             poolExecutor.submit(() -> {
-
+                try {
+                    handle(socket);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
+        }
+    }
+
+    private static void handle(Socket socket) throws Exception {
+        while (true) {
+            InputStream in = socket.getInputStream();
+            //读取
+            byte[] bytes = new byte[1024];
+            in.read(bytes);
+            System.out.println(new String(bytes));
+
+            OutputStream os = socket.getOutputStream();
+            //发送
+            os.write("received！".getBytes());
+            os.flush();
+            System.out.println("发送！");
         }
     }
 
