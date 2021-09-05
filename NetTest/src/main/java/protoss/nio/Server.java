@@ -1,5 +1,6 @@
 package protoss.nio;
 
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -62,17 +63,15 @@ public class Server {
                 byteBuffer.clear();
                 //读取
                 int len;
-                StringBuilder res = new StringBuilder();
-                while ((len = sc.read(byteBuffer)) != 0) {
-                    res.append(new String(byteBuffer.array(), 0, len));
+                ByteOutputStream byteOutputStream = new ByteOutputStream();
+                while (sc.read(byteBuffer) != 0) {
+                    byteOutputStream.write(byteBuffer.array());
                 }
-                log.info("收到:{}", res.toString());
-                log.info("收到字节长度:{}", res.toString().getBytes().length);
-                ByteBuffer writeBuffer = ByteBuffer.wrap(("收到:"+res).getBytes());
+                byte[] bytes = byteOutputStream.getBytes();
+                String res = new String(bytes);
+                ByteBuffer writeBuffer = ByteBuffer.wrap(("收到:" + res).getBytes());
                 sc.write(writeBuffer);
-                writeBuffer.clear();
-                writeBuffer.wrap(("收到字节长度:"+ res.toString().getBytes().length).getBytes());
-                sc.write(writeBuffer);
+                sc.write(ByteBuffer.wrap(("收到字节长度:" + bytes.length+"\n").getBytes()));
 //                sc.register(key.selector(), SelectionKey.OP_WRITE);
             } catch (Exception e) {
                 e.printStackTrace();
