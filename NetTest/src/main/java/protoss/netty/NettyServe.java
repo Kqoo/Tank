@@ -3,14 +3,21 @@ package protoss.netty;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.ReferenceCountUtil;
+import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class NettyServe {
+
+    //通道组
+    private static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
+
     public static void main(String[] args) {
         EventLoopGroup boosGroup = new NioEventLoopGroup(2);//处理accept事件
         EventLoopGroup workGroup = new NioEventLoopGroup(10);//处理连接后的事件
@@ -35,6 +42,7 @@ public class NettyServe {
                                 @Override
                                 public void channelActive(ChannelHandlerContext ctx) throws Exception {
                                     log.info("channelActive Thread id:{},name:{}", Thread.currentThread().getId(), Thread.currentThread().getName());
+                                    channelGroup.add(ctx.channel());
                                 }
 
                                 @Override
@@ -43,18 +51,28 @@ public class NettyServe {
                                     try {
                                         byteBuf = (ByteBuf) msg;
                                         log.info("byteBuf:{}", byteBuf);
-                                        log.info("接收到:{}", byteBuf);
                                         log.info("byteBuf的引用数量:{}", byteBuf.refCnt());
+                                        //读取数据
+                                        byte[] bytes = new byte[byteBuf.readableBytes()];
+                                        byteBuf.getBytes(byteBuf.readerIndex(), bytes);
+                                        log.info("读取数据:{}", new String(bytes));
+                                        channelGroup.writeAndFlush(msg);
                                     } finally {
-                                        if (byteBuf != null) {
-                                            ReferenceCountUtil.release(byteBuf);
-                                            log.info("释放byteBuf->{}", byteBuf.refCnt());
-                                        }
+//                                        if (byteBuf != null) {
+//                                            ReferenceCountUtil.release(byteBuf);
+//                                            log.info("释放byteBuf->{}", byteBuf.refCnt());
+//                                        }
                                     }
 
                                 }
-                            });
 
+                                @Override
+                                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+                                    cause.printStackTrace();
+                                    log.error("通道发生异常", cause);
+                                    ctx.channel().closeFuture();
+                                }
+                            });
                         }
                     })
                     .bind(8888)
