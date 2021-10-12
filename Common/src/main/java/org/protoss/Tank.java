@@ -2,6 +2,7 @@ package org.protoss;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.protoss.constant.Constant;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
 import org.protoss.strategy.FireStrategy;
@@ -15,9 +16,6 @@ import java.util.UUID;
 @Data
 @Slf4j
 public class Tank extends GameObject {
-//    public static final int WIDTH = ResourceManager.myTankD.getWidth();
-//    public static final int HEIGHT = ResourceManager.myTankD.getHeight();
-
     private int prevX;
     private int prevY;
     private Dir dir;
@@ -133,13 +131,13 @@ public class Tank extends GameObject {
     private void boundCheck() {
         if (x < 0) {
             x = 0;
-        } else if (x > TankFrame.GAME_WIDTH - width) {
-            x = TankFrame.GAME_WIDTH - width;
+        } else if (x > Constant.GAME_WIDTH - width) {
+            x = Constant.GAME_WIDTH - width;
         }
         if (y < 30) {
             y = 30;
-        } else if (y > TankFrame.GAME_HEIGHT - height) {
-            y = TankFrame.GAME_HEIGHT - height;
+        } else if (y > Constant.GAME_HEIGHT - height) {
+            y = Constant.GAME_HEIGHT - height;
         }
     }
 

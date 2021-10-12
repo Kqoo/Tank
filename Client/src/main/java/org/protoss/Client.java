@@ -15,10 +15,6 @@ import org.protoss.msg.JoinMsgEncoder;
 @Slf4j
 public class Client {
 
-    public static void main(String[] args) {
-        new Client().connect();
-    }
-
     private Channel channel;
 
     public void connect() {
@@ -29,7 +25,7 @@ public class Client {
             ChannelFuture future = bootstrap.group(group)
                                             .channel(NioSocketChannel.class)
                                             .handler(new ClientChannelInitializer())
-                                            .connect()
+                                            .connect("127.0.0.1", 8888)
                                             .sync();
             future.addListener((ChannelFutureListener) f -> {
                 if (!f.isSuccess()) {

@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>org.protoss</groupId>
-            <artifactId>Client</artifactId>
+            <artifactId>Common</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

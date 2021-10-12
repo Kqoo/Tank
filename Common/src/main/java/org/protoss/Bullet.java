@@ -1,6 +1,7 @@
 package org.protoss;
 
 import lombok.Data;
+import org.protoss.constant.Constant;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
 import org.protoss.utils.PropertyManager;
@@ -76,7 +77,7 @@ public class Bullet extends GameObject{
                 break;
         }
 
-        if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
+        if (x < 0 || y < 0 || x > Constant.GAME_WIDTH || y > Constant.GAME_HEIGHT) {
             living = false;
         }
 
