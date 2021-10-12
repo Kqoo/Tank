@@ -20,7 +20,7 @@ public class JoinMsg {
    private Group group;
    private Dir dir;
    private boolean moving;
-   private UUID uuid;
+   private UUID UUID;
 
     public JoinMsg() {
     }
@@ -35,7 +35,7 @@ public class JoinMsg {
         this.y = tank.getY();
         this.moving = tank.isMoving();
         this.group = tank.getGroup();
-        this.uuid = tank.getUuid();
+        this.UUID = tank.getUuid();
         this.dir = tank.getDir();
     }
 
@@ -48,8 +48,8 @@ public class JoinMsg {
             dos.writeInt(dir.ordinal());
             dos.writeInt(group.ordinal());
             dos.writeBoolean(isMoving());
-            dos.writeLong(uuid.getMostSignificantBits());
-            dos.writeLong(uuid.getLeastSignificantBits());
+            dos.writeLong(UUID.getMostSignificantBits());
+            dos.writeLong(UUID.getLeastSignificantBits());
             dos.flush();
             bytes = baos.toByteArray();
         } catch (Exception e) {

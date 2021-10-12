@@ -1,22 +1,24 @@
 package org.protoss;
 
+import org.protoss.constant.Constant;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
 import org.protoss.cor.ColliderChain;
 import org.protoss.utils.PropertyManager;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 public class GameModel {
 
     private static final GameModel INSTANCE = new GameModel();
-
-    private final Tank mainTank = new Tank(200, 600, Dir.UP, Group.we);
+    private Random random = new Random();
+    //随机位置
+    private final Tank mainTank = new Tank(random.nextInt(Constant.GAME_WIDTH), random.nextInt(Constant.GAME_HEIGHT), Dir.UP, Group.we);
     private List<GameObject> gameObjects = new ArrayList<>();
     private ColliderChain colliderChain;
+    private Map<UUID, Tank> tankFromNet = new HashMap<>();
 
     private GameModel() {
 //        add(mainTank);
@@ -35,12 +37,26 @@ public class GameModel {
         colliderChain = new ColliderChain();
     }
 
+    public Map<UUID, Tank> getTanks() {
+        return tankFromNet;
+    }
+
     public void add(GameObject gameObject) {
         gameObjects.add(gameObject);
+        if (gameObject instanceof Tank) {
+            Tank tank = (Tank) gameObject;
+            if (!tank.getUuid().equals(mainTank.getUuid())) {
+                tankFromNet.put(tank.getUuid(), tank);
+            }
+        }
     }
 
     public void remove(GameObject gameObject) {
         gameObjects.remove(gameObject);
+        if (gameObject instanceof Tank) {
+            Tank tank = (Tank) gameObject;
+            tankFromNet.remove(tank.getUuid());
+        }
     }
 
     public void paint(Graphics g) {
@@ -71,5 +87,9 @@ public class GameModel {
 
     public static GameModel getINSTANCE() {
         return INSTANCE;
+    }
+
+    public Tank findTankById(UUID id) {
+        return tankFromNet.get(id);
     }
 }

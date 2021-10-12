@@ -44,7 +44,7 @@ public class Client {
         }
     }
 
-    public void send(String msg){
+    public void send(String msg) {
         ByteBuf byteBuf = Unpooled.copiedBuffer(msg.getBytes());
         channel.writeAndFlush(byteBuf);
     }
@@ -69,7 +69,15 @@ public class Client {
 
         @Override
         protected void messageReceived(ChannelHandlerContext ctx, JoinMsg msg) throws Exception {
-            log.info("新坦克加入:{}", msg);
+            //判断是否是新玩家加入
+            if (!GameModel.getINSTANCE().getMainTank().getUuid().equals(msg.getUUID()) &&
+                    GameModel.getINSTANCE().findTankById(msg.getUUID()) == null) {
+                log.info("新坦克加入:{}", msg);
+                Tank tank = new Tank(msg);
+                GameModel.getINSTANCE().add(tank);
+                ctx.writeAndFlush(new JoinMsg(GameModel.getINSTANCE().getMainTank()));
+            }
+
         }
     }
 }

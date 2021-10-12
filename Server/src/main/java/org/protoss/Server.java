@@ -12,6 +12,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.msg.JoinMsg;
 import org.protoss.msg.JoinMsgDecoder;
+import org.protoss.msg.JoinMsgEncoder;
 
 @Slf4j
 public class Server {
@@ -39,6 +40,7 @@ public class Server {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addLast(new JoinMsgDecoder())
+                                    .addLast(new JoinMsgEncoder())
                                     .addLast(new ServerChildHandler());
                         }
                     })
@@ -66,8 +68,11 @@ public class Server {
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
             log.info("channelRead");
             try {
-                JoinMsg tankJoinMsg = (JoinMsg) msg;
-                log.info("tankJoinMsg:{}",tankJoinMsg);
+                JoinMsg joinMsg = (JoinMsg) msg;
+                log.info("tankJoinMsg:{}",joinMsg);
+                log.info("新玩家连接UUID:{},当前玩家数量:{}", joinMsg.getUUID(), channelGroup.size());
+                //像所有客户端发送新玩家连接的消息
+                channelGroup.writeAndFlush(msg);
             }
             finally {
                 ReferenceCountUtil.release(msg);
@@ -79,6 +84,7 @@ public class Server {
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
             cause.printStackTrace();
             channelGroup.remove(ctx.channel());
+            log.info("用户异常退出,剩余玩家数量:{}", channelGroup.size());
             ctx.close();
         }
     }

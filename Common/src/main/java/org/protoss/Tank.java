@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Constant;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
+import org.protoss.msg.JoinMsg;
 import org.protoss.strategy.FireStrategy;
 import org.protoss.utils.PropertyManager;
 import org.protoss.utils.ResourceManager;
@@ -46,6 +47,12 @@ public class Tank extends GameObject {
             e.printStackTrace();
             log.error("开火策略异常：", e);
         }
+    }
+
+    public Tank(JoinMsg joinMsg) {
+        this(joinMsg.getX(), joinMsg.getY(), joinMsg.getDir(), joinMsg.getGroup());
+        moving = joinMsg.isMoving();
+        uuid = joinMsg.getUUID();
     }
 
 

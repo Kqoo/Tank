@@ -21,7 +21,7 @@ public class JoinMsgDecoder extends ByteToMessageDecoder {
                                  .dir(Dir.values()[in.readInt()])
                                  .group(Group.values()[in.readInt()])
                                  .moving(in.readBoolean())
-                                 .uuid(new UUID(in.readLong(), in.readLong()))
+                                 .UUID(new UUID(in.readLong(), in.readLong()))
                                  .build();
         out.add(joinMsg);
     }

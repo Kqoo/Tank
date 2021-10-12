@@ -20,7 +20,7 @@ public class TankMsgTest {
                .addLast(new JoinMsgDecoder());
 
         JoinMsg joinMsg = JoinMsg.builder()
-                                 .uuid(UUID.randomUUID())
+                                 .UUID(UUID.randomUUID())
                                  .x(1)
                                  .y(2)
                                  .group(Group.enemy)
@@ -43,7 +43,7 @@ public class TankMsgTest {
                .addLast(new JoinMsgEncoder());
 
         JoinMsg joinMsg = JoinMsg.builder()
-                               .uuid(UUID.randomUUID())
+                               .UUID(UUID.randomUUID())
                                .x(1)
                                .y(2)
                                .group(Group.enemy)
@@ -58,7 +58,7 @@ public class TankMsgTest {
                                  .dir(Dir.values()[byteBuf.readInt()])
                                  .group(Group.values()[byteBuf.readInt()])
                                  .moving(byteBuf.readBoolean())
-                                 .uuid(new UUID(byteBuf.readLong(), byteBuf.readLong()))
+                                 .UUID(new UUID(byteBuf.readLong(), byteBuf.readLong()))
                                  .build();
         System.out.println(readMsg);
         assert joinMsg.equals(readMsg);
