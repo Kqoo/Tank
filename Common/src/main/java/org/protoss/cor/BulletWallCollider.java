@@ -1,8 +1,6 @@
 package org.protoss.cor;
 
-import org.protoss.Bullet;
-import org.protoss.GameObject;
-import org.protoss.Wall;
+import org.protoss.*;
 
 public class BulletWallCollider implements Collider {
     @Override
@@ -11,6 +9,14 @@ public class BulletWallCollider implements Collider {
             Bullet bullet = (Bullet) o1;
             Wall wall = (Wall) o2;
             if (bullet.getRect().intersects(wall.getRect())) {
+                //添加爆炸
+                Explode explode = new Explode();
+                int ex = bullet.getX() + bullet.getWidth() / 2 - explode.getWidth() / 2;
+                int ey = bullet.getY() + bullet.getHeight() / 2 - explode.getHeight() / 2;
+                explode.setX(ex);
+                explode.setY(ey);
+                //爆炸
+                GameModel.getINSTANCE().add(explode);
                 bullet.die();
             }
         } else if (o2 instanceof Bullet && o1 instanceof Wall) {

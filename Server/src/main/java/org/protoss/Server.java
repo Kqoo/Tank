@@ -10,9 +10,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.protoss.constant.Group;
 import org.protoss.msg.JoinMsg;
-import org.protoss.msg.JoinMsgDecoder;
-import org.protoss.msg.JoinMsgEncoder;
+import org.protoss.msg.MsgDecoder;
+import org.protoss.msg.MsgEncoder;
 
 @Slf4j
 public class Server {
@@ -39,8 +40,8 @@ public class Server {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new JoinMsgDecoder())
-                                    .addLast(new JoinMsgEncoder())
+                            pipeline.addLast(new MsgEncoder())
+                                    .addLast(new MsgDecoder())
                                     .addLast(new ServerChildHandler());
                         }
                     })
@@ -66,11 +67,15 @@ public class Server {
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-            log.info("channelRead");
+            log.info("channelRead 读取消息:{}", msg);
             try {
-                JoinMsg joinMsg = (JoinMsg) msg;
-                log.info("tankJoinMsg:{}",joinMsg);
-                log.info("新玩家连接UUID:{},当前玩家数量:{}", joinMsg.getUUID(), channelGroup.size());
+                if (msg instanceof JoinMsg) {
+                    JoinMsg joinMsg = (JoinMsg) msg;
+                    //设置group为 敌人
+                    joinMsg.setGroup(Group.enemy);
+                    log.info("tankJoinMsg:{}",joinMsg);
+                    log.info("新玩家连接UUID:{},当前玩家数量:{}", joinMsg.getId(), channelGroup.size());
+                }
                 //像所有客户端发送新玩家连接的消息
                 channelGroup.writeAndFlush(msg);
             }

@@ -4,7 +4,6 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.protoss.GameModel;
 import org.protoss.Tank;
 import org.protoss.constant.Dir;
@@ -16,30 +15,26 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Builder
-@Slf4j
-public class JoinMsg implements Msg {
+public class TankFireMsg implements Msg {
+
+    private UUID id;
     private int x;
     private int y;
-    private Group group;
     private Dir dir;
-    private boolean moving;
-    private UUID id;
+    private Group group;
 
-    public JoinMsg() {
+    public TankFireMsg() {
     }
 
-    public JoinMsg(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public JoinMsg(Tank tank) {
-        this.x = tank.getX();
-        this.y = tank.getY();
-        this.moving = tank.isMoving();
-        this.group = tank.getGroup();
-        this.id = tank.getId();
-        this.dir = tank.getDir();
+    @Override
+    public void handle(ChannelHandlerContext ctx) {
+        if (GameModel.isMainTank(id)) {
+            return;
+        }
+        Tank tank = GameModel.getINSTANCE().findTankById(id);
+        if (tank != null) {
+            tank.fire();
+        }
     }
 
     @Override
@@ -47,13 +42,12 @@ public class JoinMsg implements Msg {
         byte[] bytes = null;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
              DataOutputStream dos = new DataOutputStream(baos)) {
+            dos.writeLong(id.getMostSignificantBits());
+            dos.writeLong(id.getLeastSignificantBits());
             dos.writeInt(x);
             dos.writeInt(y);
             dos.writeInt(dir.ordinal());
             dos.writeInt(group.ordinal());
-            dos.writeBoolean(isMoving());
-            dos.writeLong(id.getMostSignificantBits());
-            dos.writeLong(id.getLeastSignificantBits());
             dos.flush();
             bytes = baos.toByteArray();
         } catch (Exception e) {
@@ -64,32 +58,19 @@ public class JoinMsg implements Msg {
 
     @Override
     public MsgType getMsgType() {
-        return MsgType.JOIN;
+        return MsgType.TANK_FIRE;
     }
 
     @Override
     public void parse(byte[] bytes) {
         try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(bytes))) {
+            id = new UUID(in.readLong(), in.readLong());
             x = in.readInt();
             y = in.readInt();
             dir = Dir.values()[in.readInt()];
             group = Group.values()[in.readInt()];
-            moving = in.readBoolean();
-            id = new UUID(in.readLong(), in.readLong());
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void handle(ChannelHandlerContext ctx) {
-        //判断是否是新玩家加入
-        if (!GameModel.getINSTANCE().getMainTank().getId().equals(this.getId()) &&
-                GameModel.getINSTANCE().findTankById(this.getId()) == null) {
-            log.info("新坦克加入:{}", this);
-            Tank tank = new Tank(this);
-            GameModel.getINSTANCE().add(tank);
-            ctx.writeAndFlush(new JoinMsg(GameModel.getINSTANCE().getMainTank()));
         }
     }
 }

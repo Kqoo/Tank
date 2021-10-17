@@ -3,6 +3,8 @@ package org.protoss;
 import lombok.extern.slf4j.Slf4j;
 import org.protoss.constant.Constant;
 import org.protoss.constant.Dir;
+import org.protoss.msg.TankFireMsg;
+import org.protoss.msg.TankMoveMsg;
 import org.protoss.strategy.DefaultFireStrategy;
 import org.protoss.strategy.TripleFireStrategy;
 
@@ -101,6 +103,13 @@ public class TankFrame extends Frame {
                     break;
                 case KeyEvent.VK_SPACE:
                     mainTank.fire();
+                    Client.getINSTANCE().send(TankFireMsg.builder()
+                                                         .id(mainTank.getId())
+                                                         .x(mainTank.getX())
+                                                         .y(mainTank.getY())
+                                                         .dir(mainTank.getDir())
+                                                         .group(mainTank.getGroup())
+                                                         .build());
                     break;
                 case KeyEvent.VK_F1:
                     if (mainTank.getFireStrategy() instanceof DefaultFireStrategy) {
@@ -115,14 +124,18 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            mainTank.setMoving(true);
             if (bu) mainTank.setDir(Dir.UP);
             if (bd) mainTank.setDir(Dir.DOWN);
             if (bl) mainTank.setDir(Dir.LEFT);
             if (br) mainTank.setDir(Dir.RIGHT);
             if (!bu && !bd && !bl && !br) {
                 mainTank.setMoving(false);
+            } else {
+                mainTank.setMoving(true);
             }
+            Client.getINSTANCE().send(new TankMoveMsg(mainTank.getId(), mainTank.getX(),
+                    mainTank.getY(), mainTank.getDir(), mainTank.isMoving()));
+
         }
     }
 

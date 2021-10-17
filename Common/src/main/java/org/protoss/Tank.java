@@ -11,6 +11,7 @@ import org.protoss.utils.PropertyManager;
 import org.protoss.utils.ResourceManager;
 
 import java.awt.*;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -20,14 +21,14 @@ public class Tank extends GameObject {
     private int prevX;
     private int prevY;
     private Dir dir;
-    private int speed = Integer.parseInt(PropertyManager.get("tankSpeed"));
+    private int speed = Integer.parseInt(Objects.requireNonNull(PropertyManager.get("tankSpeed")));
     private boolean moving = false;
     private boolean living = true;
     private Group group;
     private static Random random = new Random();
     private Rectangle rect;
     private FireStrategy fireStrategy;
-    private UUID uuid = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
     public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
@@ -52,7 +53,7 @@ public class Tank extends GameObject {
     public Tank(JoinMsg joinMsg) {
         this(joinMsg.getX(), joinMsg.getY(), joinMsg.getDir(), joinMsg.getGroup());
         moving = joinMsg.isMoving();
-        uuid = joinMsg.getUUID();
+        id = joinMsg.getId();
     }
 
 
@@ -120,12 +121,12 @@ public class Tank extends GameObject {
                     break;
             }
         }
-        if (group == Group.enemy && Math.random() > 0.88) {
-            fire();
-        }
-        if (group == Group.enemy && Math.random() > 0.88) {
-            randomDir();
-        }
+//        if (group == Group.enemy && Math.random() > 0.88) {
+//            fire();
+//        }
+//        if (group == Group.enemy && Math.random() > 0.88) {
+//            randomDir();
+//        }
         boundCheck();
         //边侧检测后更新rect坐标
         rect.x = x;
@@ -154,7 +155,7 @@ public class Tank extends GameObject {
 
     public void fire() {
         fireStrategy.fire(this);
-
+        //发送消息
 //        int bx = x + WIDTH / 2 - Bullet.WIDTH / 2;
 //        int by = y + HEIGHT / 2 - Bullet.HEIGHT / 2;
 //

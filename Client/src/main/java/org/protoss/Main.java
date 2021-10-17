@@ -17,7 +17,6 @@ public class Main {
         }).start();
 
         //连接
-        Client client = new Client();
-        client.connect();
+        Client.getINSTANCE().connect();
     }
 }

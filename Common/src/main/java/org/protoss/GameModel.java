@@ -45,8 +45,8 @@ public class GameModel {
         gameObjects.add(gameObject);
         if (gameObject instanceof Tank) {
             Tank tank = (Tank) gameObject;
-            if (!tank.getUuid().equals(mainTank.getUuid())) {
-                tankFromNet.put(tank.getUuid(), tank);
+            if (!tank.getId().equals(mainTank.getId())) {
+                tankFromNet.put(tank.getId(), tank);
             }
         }
     }
@@ -55,7 +55,7 @@ public class GameModel {
         gameObjects.remove(gameObject);
         if (gameObject instanceof Tank) {
             Tank tank = (Tank) gameObject;
-            tankFromNet.remove(tank.getUuid());
+            tankFromNet.remove(tank.getId());
         }
     }
 
@@ -91,5 +91,9 @@ public class GameModel {
 
     public Tank findTankById(UUID id) {
         return tankFromNet.get(id);
+    }
+
+    public static boolean isMainTank(UUID id) {
+        return getINSTANCE().getMainTank().getId().equals(id);
     }
 }
