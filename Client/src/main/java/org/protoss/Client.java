@@ -6,7 +6,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.protoss.constant.Constant;
 import org.protoss.msg.*;
+
+import java.util.Objects;
 
 @Slf4j
 public class Client {
@@ -27,7 +30,7 @@ public class Client {
             ChannelFuture future = bootstrap.group(group)
                                             .channel(NioSocketChannel.class)
                                             .handler(new ClientChannelInitializer())
-                                            .connect("127.0.0.1", 8888)
+                                            .connect(Objects.requireNonNull(Constant.SERVER_HOST), Constant.SERVER_PORT)
                                             .sync();
             future.addListener((ChannelFutureListener) f -> {
                 if (!f.isSuccess()) {

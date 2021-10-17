@@ -8,7 +8,6 @@ import org.protoss.GameModel;
 import org.protoss.Tank;
 import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
-import org.protoss.strategy.FireStrategy;
 
 import java.io.*;
 import java.util.UUID;

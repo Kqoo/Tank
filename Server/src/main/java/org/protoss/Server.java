@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.protoss.constant.Constant;
 import org.protoss.constant.Group;
 import org.protoss.msg.JoinMsg;
 import org.protoss.msg.MsgDecoder;
@@ -45,7 +46,7 @@ public class Server {
                                     .addLast(new ServerChildHandler());
                         }
                     })
-                    .bind(8888)
+                    .bind(Constant.SERVER_PORT)
                     .sync();
 
             future.channel().closeFuture().sync();
