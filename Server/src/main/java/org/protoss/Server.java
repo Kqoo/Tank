@@ -37,6 +37,8 @@ public class Server {
             ChannelFuture future = serverBootstrap
                     .group(boosGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
+                    //禁用Nagle算法,允许小包的发送
+                    .option(ChannelOption.TCP_NODELAY, true)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
