@@ -50,7 +50,7 @@ public class Server {
                     })
                     .bind(Constant.SERVER_PORT)
                     .sync();
-
+            log.info("Server Started!");
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
