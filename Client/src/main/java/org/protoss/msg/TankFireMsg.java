@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import org.protoss.GameModel;
 import org.protoss.Tank;
+import org.protoss.constant.Dir;
+import org.protoss.constant.Group;
+import org.protoss.strategy.FireStrategy;
 
 import java.io.*;
 import java.util.UUID;
@@ -13,10 +16,15 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Builder
-public class TankDieMsg implements Msg {
+public class TankFireMsg implements Msg {
 
     private UUID id;
-    public TankDieMsg() {
+    private int x;
+    private int y;
+    private Dir dir;
+    private Group group;
+
+    public TankFireMsg() {
     }
 
     @Override
@@ -26,7 +34,7 @@ public class TankDieMsg implements Msg {
         }
         Tank tank = GameModel.getINSTANCE().findTankById(id);
         if (tank != null) {
-            tank.die();
+            tank.fire();
         }
     }
 
@@ -37,6 +45,10 @@ public class TankDieMsg implements Msg {
              DataOutputStream dos = new DataOutputStream(baos)) {
             dos.writeLong(id.getMostSignificantBits());
             dos.writeLong(id.getLeastSignificantBits());
+            dos.writeInt(x);
+            dos.writeInt(y);
+            dos.writeInt(dir.ordinal());
+            dos.writeInt(group.ordinal());
             dos.flush();
             bytes = baos.toByteArray();
         } catch (Exception e) {
@@ -54,6 +66,10 @@ public class TankDieMsg implements Msg {
     public void parse(byte[] bytes) {
         try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(bytes))) {
             id = new UUID(in.readLong(), in.readLong());
+            x = in.readInt();
+            y = in.readInt();
+            dir = Dir.values()[in.readInt()];
+            group = Group.values()[in.readInt()];
         } catch (IOException e) {
             e.printStackTrace();
         }

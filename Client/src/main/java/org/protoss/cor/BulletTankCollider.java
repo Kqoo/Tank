@@ -1,8 +1,10 @@
 package org.protoss.cor;
 
 import org.protoss.Bullet;
+import org.protoss.Client;
 import org.protoss.GameObject;
 import org.protoss.Tank;
+import org.protoss.msg.TankDieMsg;
 
 public class BulletTankCollider implements Collider {
 
@@ -18,6 +20,8 @@ public class BulletTankCollider implements Collider {
             if (bullet.getRect().intersects(tank.getRect())) {
                 tank.die();
                 bullet.die();
+                //发送消息
+                Client.getINSTANCE().send(new TankDieMsg(tank.getId(), tank.getX(), tank.getY()));
                 return false;
             }
         } else if (o2 instanceof Bullet && o1 instanceof Tank) {

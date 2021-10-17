@@ -47,6 +47,7 @@ public class Client {
     }
 
     public void send(Msg msg) {
+        log.info("发送消息:{}", msg);
         channel.writeAndFlush(msg);
     }
 

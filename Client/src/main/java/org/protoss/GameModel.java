@@ -35,6 +35,7 @@ public class GameModel {
         add(new Wall(550, 150, 50, 100));
         add(new Wall(200, 400, 400, 100));
         colliderChain = new ColliderChain();
+        tankFromNet.put(mainTank.getId(), mainTank);
     }
 
     public Map<UUID, Tank> getTanks() {

@@ -4,10 +4,9 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.protoss.GameModel;
 import org.protoss.Tank;
-import org.protoss.constant.Dir;
-import org.protoss.constant.Group;
 
 import java.io.*;
 import java.util.UUID;
@@ -15,25 +14,21 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Builder
-public class TankFireMsg implements Msg {
+@Slf4j
+public class TankDieMsg implements Msg {
 
     private UUID id;
     private int x;
     private int y;
-    private Dir dir;
-    private Group group;
 
-    public TankFireMsg() {
+    public TankDieMsg() {
     }
 
     @Override
     public void handle(ChannelHandlerContext ctx) {
-        if (GameModel.isMainTank(id)) {
-            return;
-        }
         Tank tank = GameModel.getINSTANCE().findTankById(id);
         if (tank != null) {
-            tank.fire();
+            tank.die(x, y);
         }
     }
 
@@ -46,8 +41,6 @@ public class TankFireMsg implements Msg {
             dos.writeLong(id.getLeastSignificantBits());
             dos.writeInt(x);
             dos.writeInt(y);
-            dos.writeInt(dir.ordinal());
-            dos.writeInt(group.ordinal());
             dos.flush();
             bytes = baos.toByteArray();
         } catch (Exception e) {
@@ -58,7 +51,7 @@ public class TankFireMsg implements Msg {
 
     @Override
     public MsgType getMsgType() {
-        return MsgType.TANK_FIRE;
+        return MsgType.TANK_DIE;
     }
 
     @Override
@@ -67,8 +60,6 @@ public class TankFireMsg implements Msg {
             id = new UUID(in.readLong(), in.readLong());
             x = in.readInt();
             y = in.readInt();
-            dir = Dir.values()[in.readInt()];
-            group = Group.values()[in.readInt()];
         } catch (IOException e) {
             e.printStackTrace();
         }

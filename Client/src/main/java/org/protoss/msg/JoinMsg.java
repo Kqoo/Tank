@@ -11,6 +11,7 @@ import org.protoss.constant.Dir;
 import org.protoss.constant.Group;
 
 import java.io.*;
+import java.util.Map;
 import java.util.UUID;
 
 @Data
@@ -84,12 +85,14 @@ public class JoinMsg implements Msg {
     @Override
     public void handle(ChannelHandlerContext ctx) {
         //判断是否是新玩家加入
-        if (!GameModel.getINSTANCE().getMainTank().getId().equals(this.getId()) &&
-                GameModel.getINSTANCE().findTankById(this.getId()) == null) {
+        if (!GameModel.getINSTANCE().getMainTank().getId().equals(id) &&
+                GameModel.getINSTANCE().findTankById(id) == null) {
             log.info("新坦克加入:{}", this);
             Tank tank = new Tank(this);
             GameModel.getINSTANCE().add(tank);
             ctx.writeAndFlush(new JoinMsg(GameModel.getINSTANCE().getMainTank()));
+            Map<UUID, Tank> tankMap = GameModel.getINSTANCE().getTanks();
+            log.info("所有坦克:{}", tankMap);
         }
     }
 }

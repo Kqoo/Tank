@@ -60,6 +60,13 @@ public class Tank extends GameObject {
     public void paint(Graphics g) {
         if (!living) {
             GameModel.getINSTANCE().remove(this);
+            Color color = g.getColor();
+            Font font = g.getFont();
+            g.setColor(Color.YELLOW);
+            g.setFont(new Font("Default", Font.BOLD, 50));
+            g.drawString("GAME OVER!", 250, 350);
+            g.setColor(color);
+            g.setFont(font);
             return;
         }
         move();
@@ -96,6 +103,10 @@ public class Tank extends GameObject {
             }
         }
         g.drawImage(tankImg, x, y, null);
+        Color color = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString(id.toString(), x - 50, y - 10);
+        g.setColor(color);
     }
 
     private void move() {
@@ -155,23 +166,34 @@ public class Tank extends GameObject {
 
     public void fire() {
         fireStrategy.fire(this);
-        //发送消息
-//        int bx = x + WIDTH / 2 - Bullet.WIDTH / 2;
-//        int by = y + HEIGHT / 2 - Bullet.HEIGHT / 2;
-//
-//        bullets.add(new Bullet(bx, by, dir, this));
+        //发送消息 因为有3连发 所以写tankFrame里面
+//        Client.getINSTANCE().send(TankFireMsg.builder()
+//                                             .id(id)
+//                                             .x(x)
+//                                             .y(y)
+//                                             .dir(dir)
+//                                             .group(group)
+//                                             .build());
     }
 
     public void die() {
+        die(x, y);
+    }
+
+    public void die(int x, int y) {
+        log.info("坦克<{}>爆炸", id);
         Explode explode = new Explode();
         int ex = x + width / 2 - explode.width / 2;
         int ey = y + height / 2 - explode.height / 2;
         explode.setX(ex);
         explode.setY(ey);
-
-        living = false;
         //爆炸
         GameModel.getINSTANCE().add(explode);
+//        //发送消息
+//        if (isLiving()) {
+//            Client.getINSTANCE().send(new TankDieMsg(id, x, y));
+//        }
+        living = false;
     }
 
 }
